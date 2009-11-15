@@ -23,6 +23,8 @@ function dumpln(s){
   dump(s+"\n");
 }
 
+const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
+
 /* workhorse */
 var FictionBook = {
     read: function(a,b){
@@ -88,6 +90,13 @@ FB_Reader.prototype = {
                if(uri.match(/.*[^=]\.fb2$/g)) {
                    dumpln("MIME set to application/fb2");
                    return "application/fb2";
+               } else {
+                   var type = httpChannel.getResponseHeader("Content-Type");
+                   var disposition = httpChannel.getResponseHeader("Content-Disposition");
+
+                   if(disposition.match(/.*\.fb2/g) && !type.match(/application\/fb2/g)) {
+                       return "application/fb2";
+                   }
                }
            }
            catch(e) {
@@ -124,41 +133,47 @@ FB_Reader.prototype = {
         this.listener.onStartRequest(this.channel, context);
     },
 
-
-
     // nsIStreamListener::onDataAvailable
-    // adds additional data to the this.data
-    onDataAvailable: function(request, context, inputStream, offset, count) {
+    onDataAvailable: function (aRequest, aContext, aInputStream, aOffset, aCount) {
         // From https://developer.mozilla.org/en/Reading_textual_data
+        var is = Cc["@mozilla.org/intl/converter-input-stream;1"].createInstance(Ci.nsIConverterInputStream);
+        is.init(aInputStream, this.charset, -1, Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
-
-		var binaryInputStream = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
-		binaryInputStream.setInputStream(inputStream);
-        this.data += binaryInputStream.readBytes(count);
+        var str = {};
+        while (is.readString(4096, str) != 0) {
+            this.data += str.value;
+        }
     },
  
    // nsIRequestObserver::onStopRequest
-   onStopRequest: function(request, context, statusCode) {
-      var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-      var output = "";
+    onStopRequest: function(request, context, statusCode) {
+        var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
 
-      output = this.data; 
+        // let's parse incoming data to get DOM tree
+        var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
+        var bookTree = parser.parseFromString(this.data, "text/xml")
 
-      var storage = Cc["@mozilla.org/storagestream;1"].createInstance(Ci.nsIStorageStream);
-      storage.init(4, 0xffffffff, null);
-      var out = storage.getOutputStream(0);
+        dumpln(bookTree.getElementsByTagName("id")[0].textContent);
+        dumpln(bookTree.getElementsByTagName("book-title")[0].textContent);        
 
-      var binout = Cc["@mozilla.org/binaryoutputstream;1"].createInstance(Ci.nsIBinaryOutputStream);
-      binout.setOutputStream(out);
-      binout.writeUtf8Z(output);
-      binout.close();
+        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="http://try/fb2.css" type="text/css"');
+        bookTree.insertBefore(pi, bookTree.documentElement);
 
-      var trunc = 4;
-      var instream = storage.newInputStream(trunc);
+        // this is where we will put data
+        var storage = Cc["@mozilla.org/storagestream;1"].createInstance(Ci.nsIStorageStream);
+        storage.init(4, 0xffffffff, null);  // chunk size is 4
+        var out_stream = storage.getOutputStream(0);
 
-      this.listener.onDataAvailable(this.channel, context, instream, 0, storage.length - trunc);
-      this.listener.onStopRequest(request, context, statusCode);
-   },
+        // serialize the tree and put it into the stream
+        var serializer = Cc["@mozilla.org/xmlextras/xmlserializer;1"].createInstance(Ci.nsIDOMSerializer);
+        output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
+        // this is for passing the data
+        var in_stream = storage.newInputStream(0);
+       
+        // Pass the data to the main content listener
+        this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
+        this.listener.onStopRequest(request, context, statusCode);
+    },
 
 
 };
