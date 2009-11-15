@@ -27,9 +27,6 @@ const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
 
 /* workhorse */
 var FictionBook = {
-    read: function(a,b){
-        return 'http://ya.ru';
-    }
 
 }
 
@@ -142,10 +139,10 @@ FB_Reader.prototype = {
     },
 
     // nsIStreamListener::onDataAvailable
-    onDataAvailable: function (aRequest, aContext, aInputStream, aOffset, aCount) {
+    onDataAvailable: function (request, context, inputStream, offset, count) {
         // From https://developer.mozilla.org/en/Reading_textual_data
         var is = Cc["@mozilla.org/intl/converter-input-stream;1"].createInstance(Ci.nsIConverterInputStream);
-        is.init(aInputStream, this.charset, -1, Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
+        is.init(inputStream, this.charset, -1, Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
         var str = {};
         while (is.readString(4096, str) != 0) {
@@ -177,7 +174,8 @@ FB_Reader.prototype = {
         
         // passing serialization to stream       
         output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
-        var in_stream = storage.newInputStream(0);        
+        var in_stream = storage.newInputStream(0);
+           
         // Pass the data to the main content listener
         this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
         this.listener.onStopRequest(request, context, statusCode);
