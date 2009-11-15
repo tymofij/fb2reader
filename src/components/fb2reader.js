@@ -88,13 +88,14 @@ FB_Reader.prototype = {
            try {
                var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
                if(uri.match(/.*[^=]\.fb2$/g)) {
-                   dumpln("MIME set to application/fb2");
+                   dumpln("URI FB2 match");
                    return "application/fb2";
                } else {
                    var type = httpChannel.getResponseHeader("Content-Type");
                    var disposition = httpChannel.getResponseHeader("Content-Disposition");
 
                    if(disposition.match(/.*\.fb2/g) && !type.match(/application\/fb2/g)) {
+                       dumpln("type/disposition match");
                        return "application/fb2";
                    }
                }
@@ -129,6 +130,13 @@ FB_Reader.prototype = {
         this.channel.contentType = "text/xml";
         // All our data will be coerced to UTF-8
         this.channel.contentCharset = "UTF-8";
+
+        
+        if(this.channel instanceof Ci.nsIHttpChannel) {
+            var chan = request.QueryInterface(Ci.nsIChannel);
+            var httpChannel = chan.QueryInterface(Ci.nsIHttpChannel);
+            httpChannel.setResponseHeader("Content-Disposition", "", false);
+        }
 
         this.listener.onStartRequest(this.channel, context);
     },
@@ -166,10 +174,10 @@ FB_Reader.prototype = {
 
         // serialize the tree and put it into the stream
         var serializer = Cc["@mozilla.org/xmlextras/xmlserializer;1"].createInstance(Ci.nsIDOMSerializer);
+        
+        // passing serialization to stream       
         output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
-        // this is for passing the data
-        var in_stream = storage.newInputStream(0);
-       
+        var in_stream = storage.newInputStream(0);        
         // Pass the data to the main content listener
         this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
         this.listener.onStopRequest(request, context, statusCode);
