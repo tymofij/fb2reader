@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+   
+<Description about="urn:mozilla:install-manifest">
+
+    <em:id>fb2reader@clear.com.ua</em:id>
+    <em:name>FB2 Reader</em:name>
+    <em:version>0.1</em:version>
+    <em:creator>Timothy Babych</em:creator>
+    <em:description>Read FB2 e-Books with Firefox</em:description>
+    <em:homepageURL>http://bitbucket.org/tymofiy/fb2reader/</em:homepageURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>3.0</em:minVersion>
+        <em:maxVersion>3.6b2</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <em:localized>
+      <Description>
+        <em:locale>uk</em:locale>
+        <em:name>Читалка FB2</em:name>        
+        <em:creator>Тимофій Бабич</em:creator>        
+        <em:description>Читайте електронні книжки FB2 просто з Firefox’а.</em:description>
+      </Description>
+    </em:localized>      
+   
+  </Description>
+</RDF>
