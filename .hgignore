@@ -1,0 +1,10 @@
+# use glob syntax.
+syntax: glob
+*~*
+*.pyc
+*.swp
+build
+openberg_lector.xpi
+# switch to regexp syntax.
+syntax: regexp
+
