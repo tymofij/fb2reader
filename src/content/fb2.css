@@ -1,0 +1,9 @@
+FictionBook {padding: 2em;}
+binary, description {display: none; }
+
+section, title, p {display: block; }
+p { margin: 1em 0; }
+
+body > title {font-size: x-large; }
+title {font-size: large;}
+    title p {margin: 0.3em 0;}

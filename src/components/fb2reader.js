@@ -90,7 +90,7 @@ FB_Reader.prototype = {
                    var type = httpChannel.getResponseHeader("Content-Type");
                    var disposition = httpChannel.getResponseHeader("Content-Disposition");
 
-                   if(disposition.match(/.*\.fb2/g) && !type.match(/application\/fb2/g)) {
+                   if(disposition.match(/.*\.fb2$/g) && !type.match(/application\/fb2/g)) {
                        dumpln("type/disposition match on "+uri);
                        return "application/fb2";
                    }
@@ -168,8 +168,11 @@ FB_Reader.prototype = {
         var bookTree = parser.parseFromString(this.data, "text/xml")
 
         dumpln("loaded tree, id="+bookTree.getElementsByTagName("id")[0].textContent);
+        var Application = Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);        
 
-        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="http://try/fb2.css" type="text/css"');
+        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="http://firefox.org.ua/xpi/fb2.css" type="text/css"');
+//        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2_xhtml.xsl" type="text/xsl"');
+//        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
         bookTree.insertBefore(pi, bookTree.documentElement);
 
         // this is where we will put data
@@ -183,7 +186,7 @@ FB_Reader.prototype = {
         // passing serialization to stream       
         output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
         var in_stream = storage.newInputStream(0);
-           
+
         // Pass the data to the main content listener
         this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
         this.listener.onStopRequest(request, context, statusCode);

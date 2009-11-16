@@ -9,7 +9,12 @@
     <em:version>0.1</em:version>
     <em:creator>Timothy Babych</em:creator>
     <em:description>Read FB2 e-Books with Firefox</em:description>
-    <em:homepageURL>http://bitbucket.org/tymofiy/fb2reader/</em:homepageURL>
+    <!-- Firefox 3.6 does not need it -->
+    <em:iconURL>chrome://fb2reader/skin/icon.png</em:iconURL>
+    <em:homepageURL>http://clear.com.ua/</em:homepageURL>
+
+    <em:updateURL>http://firefox.org.ua/xpi/update.rdf</em:updateURL>
+    <em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvo8ymuukJWnlvl1g54GIDxGTLSCXfT6EquebVszdnPrs75OofxCO6E4ResRXxGPHW/H9I00wyR5sHpuvDDQT3vk/JRmXOgXEQ4ttBwWrHKjPTOxJDOC7iHG5qErCCbzxrFgFE7uuGLrBAg0jU6/s5RRNat4/eG/NsK98fIiyVxwIDAQAB</em:updateKey>    
 
     <!-- Firefox -->
     <em:targetApplication>
@@ -23,11 +28,20 @@
     <em:localized>
       <Description>
         <em:locale>uk</em:locale>
-        <em:name>Читалка FB2</em:name>        
-        <em:creator>Тимофій Бабич</em:creator>        
+        <em:name>Читалка FB2</em:name>
+        <em:creator>Тимофій Бабич</em:creator>
         <em:description>Читайте електронні книжки FB2 просто з Firefox’а.</em:description>
       </Description>
-    </em:localized>      
+    </em:localized>
    
+    <em:localized>
+      <Description>
+        <em:locale>uk</em:locale>
+        <em:name>Читалка FB2</em:name>
+        <em:creator>Тимофей Бабич</em:creator>
+        <em:description>Читайте електронные книги FB2 прямо из Firefox’а.</em:description>
+      </Description>
+    </em:localized>
+
   </Description>
 </RDF>
