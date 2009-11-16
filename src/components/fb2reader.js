@@ -170,9 +170,9 @@ FB_Reader.prototype = {
         dumpln("loaded tree, id="+bookTree.getElementsByTagName("id")[0].textContent);
         var Application = Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);        
 
-        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="http://firefox.org.ua/xpi/fb2.css" type="text/css"');
+        // CSS or XSLT? that is a question!
 //        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2_xhtml.xsl" type="text/xsl"');
-//        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
+        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
         bookTree.insertBefore(pi, bookTree.documentElement);
 
         // this is where we will put data
