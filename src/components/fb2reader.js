@@ -20,7 +20,7 @@ const Ci = Components.interfaces;
 const Cc = Components.classes;
 
 function dumpln(s){
-  dump(s+"\n");
+  dump("FB2 "+s+"\n");
 }
 
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
@@ -80,19 +80,18 @@ FB_Reader.prototype = {
     // nsIContentSniffer::getMIMETypeFromContent
     getMIMETypeFromContent: function(request, data) {
        // sets mime type for .fb2 files  
-       dumpln("getMIMETypeFromContent "+request.name);
        if(request instanceof Ci.nsIHttpChannel) {
            try {
                var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
                if(uri.match(/.*[^=]\.fb2$/g)) {
-                   dumpln("URI FB2 match");
+                   dumpln("URI match on "+uri);
                    return "application/fb2";
                } else {
                    var type = httpChannel.getResponseHeader("Content-Type");
                    var disposition = httpChannel.getResponseHeader("Content-Disposition");
 
                    if(disposition.match(/.*\.fb2/g) && !type.match(/application\/fb2/g)) {
-                       dumpln("type/disposition match");
+                       dumpln("type/disposition match on "+uri);
                        return "application/fb2";
                    }
                }
@@ -128,7 +127,7 @@ FB_Reader.prototype = {
         // All our data will be coerced to UTF-8
         this.channel.contentCharset = "UTF-8";
 
-        
+        // do not care about Content-Disposition: Attachment        
         if(this.channel instanceof Ci.nsIHttpChannel) {
             var chan = request.QueryInterface(Ci.nsIChannel);
             var httpChannel = chan.QueryInterface(Ci.nsIHttpChannel);
@@ -140,26 +139,35 @@ FB_Reader.prototype = {
 
     // nsIStreamListener::onDataAvailable
     onDataAvailable: function (request, context, inputStream, offset, count) {
-        // From https://developer.mozilla.org/en/Reading_textual_data
-        var is = Cc["@mozilla.org/intl/converter-input-stream;1"].createInstance(Ci.nsIConverterInputStream);
-        is.init(inputStream, this.charset, -1, Ci.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
+		var binaryInputStream = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
 
-        var str = {};
-        while (is.readString(4096, str) != 0) {
-            this.data += str.value;
-        }
+		binaryInputStream.setInputStream(inputStream);
+        this.data += binaryInputStream.readBytes(count);        
+        
     },
  
-   // nsIRequestObserver::onStopRequest
+    // Fired when all the data was successfully read
+    // nsIRequestObserver::onStopRequest
     onStopRequest: function(request, context, statusCode) {
-        var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
+
+        this.charset = 'UTF-8'; // default one
+
+        // Try to detect the XML encoding if declared in the file
+        if (this.data.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
+             this.charset = RegExp.$1;
+        }
+        dumpln("charset detected: "+this.charset)
+        
+        // ok, lets make unicode out of binary
+        var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
+        converter.charset = this.charset;
+        this.data = converter.ConvertToUnicode(this.data);
 
         // let's parse incoming data to get DOM tree
         var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
         var bookTree = parser.parseFromString(this.data, "text/xml")
 
-        dumpln(bookTree.getElementsByTagName("id")[0].textContent);
-        dumpln(bookTree.getElementsByTagName("book-title")[0].textContent);        
+        dumpln("loaded tree, id="+bookTree.getElementsByTagName("id")[0].textContent);
 
         var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="http://try/fb2.css" type="text/css"');
         bookTree.insertBefore(pi, bookTree.documentElement);
