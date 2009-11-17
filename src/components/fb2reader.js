@@ -168,7 +168,6 @@ FB_Reader.prototype = {
         var bookTree = parser.parseFromString(this.data, "text/xml")
 
         dumpln("loaded tree, id="+bookTree.getElementsByTagName("id")[0].textContent);
-        var Application = Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);        
 
         // add our CSS to the document
         var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
@@ -177,6 +176,7 @@ FB_Reader.prototype = {
         // this is where we will put data
         var storage = Cc["@mozilla.org/storagestream;1"].createInstance(Ci.nsIStorageStream);
         storage.init(4, 0xffffffff, null);  // chunk size is 4
+        // create the stream to put data into storage
         var out_stream = storage.getOutputStream(0);
 
         // serialize the tree and put it into the stream
@@ -184,6 +184,7 @@ FB_Reader.prototype = {
         
         // passing serialization to stream       
         output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
+        // create the stream from which original channel listener will get what we gave it
         var in_stream = storage.newInputStream(0);
 
         // Pass the data to the main content listener
