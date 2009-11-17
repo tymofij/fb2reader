@@ -1,6 +1,12 @@
 FictionBook {padding: 2em;}
-binary, description {display: none; }
 
+/* hide metadata */
+description title-info *, description document-info, description publish-info, binary {display: none; }
+/* but show coverpage and its image */
+coverpage{display:block !important;} 
+    coverpage * {display:inline !important;}
+
+/* those are blocky */
 section, title, p {display: block; }
 p { margin: 1em 0; }
 
