@@ -23,16 +23,17 @@ sub {vertical-align: sub;font-size: smaller;}
 sup {vertical-align: super;font-size: smaller;}
 code {white-space: pre; font-family: monospace;} 
 
+/* citations and epigraphs */
 cite {border-left: 5px solid silver; background: #eee; }
 epigraph {display: block; margin-left: 20%;}
 text-author {margin-left: 5em;}
 
+/* poems */
 poem {}
 stanza {display:block; margin-bottom: 0.3em 0;}
     v {display: block;}
 
-
-    
+/* notes */    
 a[type='note'] {
     background:#f5f5b5; 
     position:relative;
