@@ -13,8 +13,25 @@ p { margin: 1em 0; }
 body > title {font-size: x-large; }
 title {font-size: large;}
     title p {margin: 0.3em 0;}
+    subtitle {}
 
+/* visuals */
 emphasis {font-style: italic;}
+strong {font-weight:bold;}
+strikethrough { text-decoration: line-through; }
+sub {vertical-align: sub;font-size: smaller;}
+sup {vertical-align: super;font-size: smaller;}
+code {white-space: pre; font-family: monospace;} 
+
+cite {border-left: 5px solid silver; background: #eee; }
+epigraph {display: block; margin-left: 20%;}
+text-author {margin-left: 5em;}
+
+poem {}
+stanza {display:block; margin-bottom: 0.3em 0;}
+    v {display: block;}
+
+
     
 a[type='note'] {
     background:#f5f5b5; 
