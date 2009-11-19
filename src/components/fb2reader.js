@@ -167,7 +167,12 @@ FB_Reader.prototype = {
         var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
         var bookTree = parser.parseFromString(this.data, "text/xml")
 
-        dumpln("loaded tree, id="+bookTree.getElementsByTagName("id")[0].textContent);
+        dump("loaded tree")
+        try {
+            dumpln(", id="+bookTree.getElementsByTagName("id")[0].textContent);
+        } catch(e){
+            dumpln(", no id")
+        }
 
         // add our CSS to the document
         var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
