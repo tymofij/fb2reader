@@ -35,7 +35,7 @@
        <!-- Each li is a different version of the same add-on -->
         <RDF:li>
           <RDF:Description>
-            <em:version>0.4</em:version> <!-- This is the version number of the add-on -->
+            <em:version>0.5</em:version> <!-- This is the version number of the add-on -->
             <!-- One targetApplication for each application the add-on is compatible with -->
             <em:targetApplication>
               <RDF:Description>
@@ -44,7 +44,7 @@
                 <em:maxVersion>3.6b3</em:maxVersion>
                 <!-- This is where this version of the add-on will be downloaded from -->
                 <em:updateLink>http://firefox.org.ua/xpi/fb2reader.xpi</em:updateLink>
-                <em:updateHash>sha1:28e51b3ec13e3fd2136976fa3aebe2f2bb11409a</em:updateHash>
+                <em:updateHash>sha1:224144c8d16312362c88cbaf02b34e3042c791cd</em:updateHash>
                 
                 <!-- A page describing what is new in this updated version -->
                 <em:updateInfoURL>http://www.firefox.org.ua/xpi/fb2reader-0.4.xhtml</em:updateInfoURL>
