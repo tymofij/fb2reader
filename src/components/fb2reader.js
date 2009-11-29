@@ -148,6 +148,38 @@ FB_Reader.prototype = {
 
         this.charset = 'UTF-8'; // default one
 
+        // is it a ZIP ?
+        if (this.data.slice(0,2) == 'PK'){
+            try{
+            // temporary file for IZipReader to work on
+            var file = Cc["@mozilla.org/file/directory_service;1"].
+                    getService(Ci.nsIProperties).get("TmpD", Ci.nsIFile);
+            file.append("fictionbook.zip");
+            file.createUnique(Ci.nsIFile.NORMAL_FILE_TYPE, 0666);
+            // a stream for pushing content into thefile        
+            var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
+            stream.init(file, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+            stream.write(this.data, this.data.length);
+            if (stream instanceof Ci.nsISafeOutputStream) {
+                stream.finish();
+            } else {
+                stream.close();
+            }
+            // reading of this file
+            var zReader = Cc["@mozilla.org/libjar/zip-reader;1"].createInstance(Ci.nsIZipReader);
+            zReader.open(file)
+            // grabbing first fb2 inside
+            var fb2_inside = zReader.findEntries("*.fb2").getNext()
+            var fb2_stream = zReader.getInputStream(fb2_inside)
+
+            // now getting the contet of the book
+            var s2 = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
+            s2.init(fb2_stream);
+            this.data = s2.read(s2.available());
+            
+            }catch(e) {dumpln(e)}
+        }
+
         // Try to detect the XML encoding if declared in the file
         if (this.data.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
              this.charset = RegExp.$1;
