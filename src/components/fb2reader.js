@@ -79,26 +79,22 @@ FB_Reader.prototype = {
 
     // nsIContentSniffer::getMIMETypeFromContent
     getMIMETypeFromContent: function(request, data) {
-       // sets mime type for .fb2 files  
-       if(request instanceof Ci.nsIHttpChannel) {
-           try {
-               var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-               if(uri.match(/.*[^=]\.fb2$/g)) {
-                   dumpln("URI match on "+uri);
-                   return "application/fb2";
-               } else {
-                   var type = httpChannel.getResponseHeader("Content-Type");
-                   var disposition = httpChannel.getResponseHeader("Content-Disposition");
+       // sets mime type for .fb2 and fb.* files
+       try {
+           var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
+           if(uri.match(/.*[^=]\.fb2/g)) {
+               dumpln("URI match on "+uri);
+               return "application/fb2";
+           } else {
+               var type = httpChannel.getResponseHeader("Content-Type");
+               var disposition = httpChannel.getResponseHeader("Content-Disposition");
 
-                   if(disposition.match(/.*\.fb2$/g) && !type.match(/application\/fb2/g)) {
-                       dumpln("type/disposition match on "+uri);
-                       return "application/fb2";
-                   }
+               if(disposition.match(/.*\.fb2/g) && !type.match(/application\/fb2/g)) {
+                   dumpln("type/disposition match on "+uri);
+                   return "application/fb2";
                }
            }
-           catch(e) {
-           }
-       }
+       } catch(e) {}
     },
 
   
