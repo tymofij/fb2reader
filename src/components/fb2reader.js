@@ -25,11 +25,6 @@ function dumpln(s){
 
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
 
-/* workhorse */
-var FictionBook = {
-
-}
-
 /* FB2 reader component */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -232,15 +227,5 @@ FB_Reader.prototype = {
 var components = [FB_Reader];
 
 function NSGetModule(compMgr, fileSpec){
-   function postRegister() {
-      var catMgr = XPCOMUtils.categoryManager;
-      catMgr.addCategoryEntry('ext-to-type-mapping', 'fb2', 'application/fb2', true, true);
-   }
-
-   function preUnregister() {
-      var catMgr = XPCOMUtils.categoryManager;
-      catMgr.addCategoryEntry('ext-to-type-mapping', 'fb2', true);
-   }
-
-   return XPCOMUtils.generateModule(components, postRegister, preUnregister);
+   return XPCOMUtils.generateModule(components, function(){}, function(){});
 }

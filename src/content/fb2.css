@@ -7,7 +7,7 @@ coverpage{display:block !important;}
     coverpage * {display:inline !important;}
 
 /* those are blocky */
-section, title, p {display: block; }
+section, title, p, cite, epigraph, poem, stanza, v {display: block; }
 p { margin: 1em 0; }
 
 body > title {font-size: x-large; }
@@ -24,14 +24,15 @@ sup {vertical-align: super;font-size: smaller;}
 code {white-space: pre; font-family: monospace;} 
 
 /* citations and epigraphs */
-cite {border-left: 5px solid silver; background: #eee; }
-epigraph {display: block; margin-left: 20%;}
+cite {border-left: 5px solid silver; background: #eee; padding: 0.4em 1em;}
+cite > p:first-child, cite > p:last-child {margin: 0;}
+epigraph {margin-left: 20%;}
 text-author {margin-left: 5em;}
 
 /* poems */
-poem {}
-stanza {display:block; margin-bottom: 0.3em 0;}
-    v {display: block;}
+poem {margin-left: 2em}
+stanza {margin-bottom: 0.3em 0;}
+    v {}
 
 /* notes */    
 a[type='note'] {
