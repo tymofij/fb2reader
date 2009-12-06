@@ -77,14 +77,15 @@ FB_Reader.prototype = {
        // sets mime type for .fb2 and fb.* files
        try {
            var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-           if(uri.match(/.*[^=]\.fb2/g)) {
+           const FB2_REGEX = /.*\.fb2(.zip)?$/g
+           if(uri.match(FB2_REGEX)) {
                dumpln("URI match on "+uri);
                return "application/fb2";
            } else {
                var type = httpChannel.getResponseHeader("Content-Type");
                var disposition = httpChannel.getResponseHeader("Content-Disposition");
 
-               if(disposition.match(/.*\.fb2/g) && !type.match(/application\/fb2/g)) {
+               if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
                    dumpln("type/disposition match on "+uri);
                    return "application/fb2";
                }
