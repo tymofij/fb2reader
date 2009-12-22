@@ -1,0 +1,19 @@
+<!ENTITY Error.title "Не удалось открыть FB2 книгу">
+
+<!ENTITY ZipFailure.shortDesc "Не удалось открыть архив">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>Возможно, архив поврежден.</li>
+  <li>Или там нет ни одного *.fb2 внутри.</li>
+</ul>
+">
+
+<!ENTITY XMLFailure.shortDesc "Неправильная структура FB2">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>XML этой FB2 книги невалидный.</li>
+</ul>
+">
+
+
+
