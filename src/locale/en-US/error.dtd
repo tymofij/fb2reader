@@ -1,0 +1,19 @@
+<!ENTITY Error.title "Error opening FB2 book">
+
+<!ENTITY ZipFailure.shortDesc "Could not unzip the book">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>May be the arhive is broken.</li>
+  <li>May be it lacks *.fb2 file inside.</li>
+</ul>
+">
+
+<!ENTITY XMLFailure.shortDesc "Non-valid FB2 structure">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>The XML of the FB2 book seems to be invalid.</li>
+</ul>
+">
+
+
+

@@ -1,4 +1,5 @@
 content fb2reader           content/  contentaccessible=yes
 skin    fb2reader  default  skin/
 overlay chrome://browser/content/browser.xul chrome://fb2reader/content/overlay.xul
+locale  fb2reader  en-US    locale/en-US/
 

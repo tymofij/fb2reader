@@ -144,83 +144,107 @@ FB_Reader.prototype = {
 
         this.charset = 'UTF-8'; // default one
 
-        // is it a ZIP ?
-        if (this.data.slice(0,2) == 'PK'){
-            try{
-            // temporary file for IZipReader to work on
-            var file = Cc["@mozilla.org/file/directory_service;1"].
-                    getService(Ci.nsIProperties).get("TmpD", Ci.nsIFile);
-            file.append("fictionbook.zip");
-            file.createUnique(Ci.nsIFile.NORMAL_FILE_TYPE, 0666);
-            // a stream for pushing content into thefile        
-            var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
-            stream.init(file, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
-            stream.write(this.data, this.data.length);
-            if (stream instanceof Ci.nsISafeOutputStream) {
-                stream.finish();
-            } else {
-                stream.close();
+        try { // the big one, which will handle both Zip and XML Failures
+
+            // is it a ZIP ?
+            if (this.data.slice(0,2) == 'PK'){
+                try {
+                    // temporary file for IZipReader to work on
+                    var file = Cc["@mozilla.org/file/directory_service;1"].
+                            getService(Ci.nsIProperties).get("TmpD", Ci.nsIFile);
+                    file.append("fictionbook.zip");
+                    file.createUnique(Ci.nsIFile.NORMAL_FILE_TYPE, 0666);
+                    // a stream for pushing content into thefile        
+                    var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
+                    stream.init(file, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
+                    stream.write(this.data, this.data.length);
+                    if (stream instanceof Ci.nsISafeOutputStream) {
+                        stream.finish();
+                    } else {
+                        stream.close();
+                    }
+                    // reading of this file
+                    var zReader = Cc["@mozilla.org/libjar/zip-reader;1"].createInstance(Ci.nsIZipReader);
+                    zReader.open(file)
+                    // grabbing first fb2 inside
+                    var fb2_inside = zReader.findEntries("*.fb2").getNext()
+                    var fb2_stream = zReader.getInputStream(fb2_inside)
+
+                    // now getting the content of the book
+                    var s2 = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
+                    s2.init(fb2_stream);
+                    this.data = s2.read(s2.available());
+                } catch (e) { 
+                    dumpln(e)
+                    throw "error_zip" 
+                }
             }
-            // reading of this file
-            var zReader = Cc["@mozilla.org/libjar/zip-reader;1"].createInstance(Ci.nsIZipReader);
-            zReader.open(file)
-            // grabbing first fb2 inside
-            var fb2_inside = zReader.findEntries("*.fb2").getNext()
-            var fb2_stream = zReader.getInputStream(fb2_inside)
-
-            // now getting the contet of the book
-            var s2 = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
-            s2.init(fb2_stream);
-            this.data = s2.read(s2.available());
             
-            }catch(e) {dumpln(e)}
+            try {
+                // Try to detect the XML encoding if declared in the file
+                if (this.data.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
+                     this.charset = RegExp.$1;
+                }
+                dumpln("charset detected: "+this.charset)
+                
+                // ok, lets make unicode out of binary
+                var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
+                converter.charset = this.charset;
+                this.data = converter.ConvertToUnicode(this.data);
+
+                // let's parse incoming data to get DOM tree
+                var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
+                var bookTree = parser.parseFromString(this.data, "text/xml")
+
+                // if the parsing process failed, DOMParser currently does not throw an exception, 
+                // but instead returns an error document (see bug 45566)
+                // let's check it did parse
+                if (bookTree.getElementsByTagName("FictionBook").length == 0) {
+                    throw "error_xml"
+                }
+
+                // add our CSS to the document
+                var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
+                bookTree.insertBefore(pi, bookTree.documentElement);
+
+            } catch (e) {
+                dumpln(e)
+                throw "error_xml"
+            }
+
+        // General error handling block
+        } catch(e) {
+            dumpln("===========")
+            dumpln(e)
+            var errorDoc = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
+            errorDoc.open ("GET", "chrome://fb2reader/content/"+e+".xhtml", false); // synchronous load
+            errorDoc.overrideMimeType("text/xml");
+            errorDoc.send(null);
+            bookTree = errorDoc.responseXML
+            dumpln("-----------")
+
+        // lets output the XML, be it error or the book
+        } finally {
+
+            // this is where we will put data
+            var storage = Cc["@mozilla.org/storagestream;1"].createInstance(Ci.nsIStorageStream);
+            storage.init(4, 0xffffffff, null);  // chunk size is 4
+            // create the stream to put data into storage
+            var out_stream = storage.getOutputStream(0);
+
+            // serialize the tree and put it into the stream
+            var serializer = Cc["@mozilla.org/xmlextras/xmlserializer;1"].createInstance(Ci.nsIDOMSerializer);
+            
+            // passing serialization to stream       
+            output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
+            // create the stream from which original channel listener will get what we gave it
+            var in_stream = storage.newInputStream(0);
+
+            // Pass the data to the main content listener
+            this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
+            this.listener.onStopRequest(request, context, statusCode);
         }
-
-        // Try to detect the XML encoding if declared in the file
-        if (this.data.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
-             this.charset = RegExp.$1;
-        }
-        dumpln("charset detected: "+this.charset)
-        
-        // ok, lets make unicode out of binary
-        var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
-        converter.charset = this.charset;
-        this.data = converter.ConvertToUnicode(this.data);
-
-        // let's parse incoming data to get DOM tree
-        var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
-        var bookTree = parser.parseFromString(this.data, "text/xml")
-
-        dump("loaded tree")
-        try {
-            dumpln(", id="+bookTree.getElementsByTagName("id")[0].textContent);
-        } catch(e){
-            dumpln(", no id")
-        }
-
-        // add our CSS to the document
-        var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
-        bookTree.insertBefore(pi, bookTree.documentElement);
-
-        // this is where we will put data
-        var storage = Cc["@mozilla.org/storagestream;1"].createInstance(Ci.nsIStorageStream);
-        storage.init(4, 0xffffffff, null);  // chunk size is 4
-        // create the stream to put data into storage
-        var out_stream = storage.getOutputStream(0);
-
-        // serialize the tree and put it into the stream
-        var serializer = Cc["@mozilla.org/xmlextras/xmlserializer;1"].createInstance(Ci.nsIDOMSerializer);
-        
-        // passing serialization to stream       
-        output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
-        // create the stream from which original channel listener will get what we gave it
-        var in_stream = storage.newInputStream(0);
-
-        // Pass the data to the main content listener
-        this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
-        this.listener.onStopRequest(request, context, statusCode);
     },
-
 
 };
 
