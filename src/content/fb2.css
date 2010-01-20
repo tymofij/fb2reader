@@ -31,7 +31,7 @@ text-author {margin-left: 5em;}
 
 /* poems */
 poem {margin-left: 2em}
-stanza {margin-bottom: 0.3em 0;}
+stanza {margin-bottom: 0.3em;}
     v {}
 
 /* notes */    
@@ -58,4 +58,4 @@ a[type='note'] {
         }
         a[type='note'] section p { margin: 0.1em 0.3em; }
         a[type='note'] section title { display:none; }    
-
+        a[type='note'] section[position_h='left'] { left:auto; right: 0.5em;}
