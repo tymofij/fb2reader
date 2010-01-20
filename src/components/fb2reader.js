@@ -74,23 +74,31 @@ FB_Reader.prototype = {
 
     // nsIContentSniffer::getMIMETypeFromContent
     getMIMETypeFromContent: function(request, data) {
-       // sets mime type for .fb2 and fb.* files
-       try {
-           var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-           const FB2_REGEX = /.*\.fb2(.zip)?$/g
-           if(uri.match(FB2_REGEX)) {
-               dumpln("URI match on "+uri);
-               return "application/fb2";
-           } else {
-               var type = httpChannel.getResponseHeader("Content-Type");
-               var disposition = httpChannel.getResponseHeader("Content-Disposition");
+        // sets mime type for .fb2 and fb.* files
+       
+        var prefs = Cc["@mozilla.org/preferences-service;1"]
+                        .getService(Ci.nsIPrefBranch);
+ 
+        if (!prefs.getBoolPref("extensions.fb2reader.enabled"))
+            throw NS_ERROR_NOT_AVAILABLE
 
-               if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
-                   dumpln("type/disposition match on "+uri);
-                   return "application/fb2";
-               }
-           }
-       } catch(e) {}
+        try {
+            var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
+            const FB2_REGEX = /.*\.fb2(.zip)?$/g
+            if(uri.match(FB2_REGEX)) {
+                dumpln("URI match on "+uri);
+                return "application/fb2";
+            } else {
+                var type = httpChannel.getResponseHeader("Content-Type");
+                var disposition = httpChannel.getResponseHeader("Content-Disposition");
+
+                if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
+                    dumpln("type/disposition match on "+uri);
+                    return "application/fb2";
+                }
+            }
+        } catch(e) {}
+        throw NS_ERROR_NOT_AVAILABLE
     },
 
   
@@ -155,7 +163,8 @@ FB_Reader.prototype = {
                     file.append("fictionbook.zip");
                     file.createUnique(Ci.nsIFile.NORMAL_FILE_TYPE, 0666);
                     // a stream for pushing content into thefile        
-                    var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"].createInstance(Ci.nsIFileOutputStream);
+                    var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"]
+                                    .createInstance(Ci.nsIFileOutputStream);
                     stream.init(file, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
                     stream.write(this.data, this.data.length);
                     if (stream instanceof Ci.nsISafeOutputStream) {
@@ -164,14 +173,16 @@ FB_Reader.prototype = {
                         stream.close();
                     }
                     // reading of this file
-                    var zReader = Cc["@mozilla.org/libjar/zip-reader;1"].createInstance(Ci.nsIZipReader);
+                    var zReader = Cc["@mozilla.org/libjar/zip-reader;1"]
+                                    .createInstance(Ci.nsIZipReader);
                     zReader.open(file)
                     // grabbing first fb2 inside
                     var fb2_inside = zReader.findEntries("*.fb2").getNext()
                     var fb2_stream = zReader.getInputStream(fb2_inside)
 
                     // now getting the content of the book
-                    var s2 = Cc["@mozilla.org/scriptableinputstream;1"].createInstance(Ci.nsIScriptableInputStream);
+                    var s2 = Cc["@mozilla.org/scriptableinputstream;1"]
+                                    .createInstance(Ci.nsIScriptableInputStream);
                     s2.init(fb2_stream);
                     this.data = s2.read(s2.available());
                 } catch (e) { 
@@ -188,12 +199,14 @@ FB_Reader.prototype = {
                 dumpln("charset detected: "+this.charset)
                 
                 // ok, lets make unicode out of binary
-                var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Ci.nsIScriptableUnicodeConverter);
+                var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
+                                    .createInstance(Ci.nsIScriptableUnicodeConverter);
                 converter.charset = this.charset;
                 this.data = converter.ConvertToUnicode(this.data);
 
                 // let's parse incoming data to get DOM tree
-                var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
+                var parser = Cc["@mozilla.org/xmlextras/domparser;1"]
+                                    .createInstance(Ci.nsIDOMParser);
                 var bookTree = parser.parseFromString(this.data, "text/xml")
 
                 // if the parsing process failed, DOMParser currently does not throw an exception, 

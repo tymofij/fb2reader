@@ -64,7 +64,12 @@ var fb2Handler = {
         var doc = event.originalTarget
         util.doc = doc
         // execute for FictionBook only
-        if(doc.location.href.search(".fb2") > -1) {
+        
+        var prefs = Cc["@mozilla.org/preferences-service;1"]
+                        .getService(Ci.nsIPrefBranch);
+ 
+        if(doc.location.href.search(".fb2") > -1 && 
+                    prefs.getBoolPref("extensions.fb2reader.enabled") ) {
             try { // SeaMonkey and Fennec do not have it
                 var browser = gBrowser.getBrowserForDocument(doc)
                 var tabIndex = gBrowser.browsers.indexOf(browser)
