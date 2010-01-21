@@ -11,7 +11,9 @@
     <em:description>Read FB2 e-Books with Firefox</em:description>
     <!-- Firefox 3.6 does not need it, btw -->
     <em:iconURL>chrome://fb2reader/skin/icon.png</em:iconURL>
+    <em:optionsURL>chrome://fb2reader/content/options.xul</em:optionsURL>
     <em:homepageURL>http://clear.com.ua/projects/fb2reader/</em:homepageURL>
+
 
     <!-- Firefox -->
     <em:targetApplication>

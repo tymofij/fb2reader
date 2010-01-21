@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://fb2reader/locale/messages.dtd">
+
+<prefwindow
+      title="&preferences.title;"
+      xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<prefpane>
+<preferences>
+  <preference id="pref_enabled" name="extensions.fb2reader.enabled" type="bool"/>
+</preferences>
+<checkbox label="&preferences.enabled;" preference="pref_enabled"/>
+</prefpane>
+</prefwindow>
+
