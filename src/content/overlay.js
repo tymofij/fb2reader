@@ -26,7 +26,8 @@ var util = {
     },
 
     getHrefVal : function(elem){
-        return elem.getAttributeNS(XLink_NS, 'href').slice(1)  
+        var href = elem.getAttributeNS(XLink_NS, 'href')
+        return href.slice(href.indexOf("#")+1)
     },
 }
 
@@ -38,12 +39,21 @@ var fb2Handler = {
             appcontent.addEventListener("DOMContentLoaded", fb2Handler.onPageLoad, true)
     },
 
+    internal_link: function(event) {
+        var a = event.target
+        alert(0)        
+        var elem = util.getSingleElement("p[@id='"+util.getHrefVal(a)+"']")
+        alert(elem)
+        alert(1)
+        return false
+    },
+
     tooltip: function(event) {
         var a = event.target
         if (a.nodeName=='a'){
 
             try { // move it here if not yet
-                var note = util.getSingleElement("section[@id='"+util.getHrefVal(a)+"']")                
+                var note = util.getSingleElement("section[@id='"+util.getHrefVal(a)+"']")
                 a.appendChild(note)
             } catch(e) { // just get it
                 var note = a.firstChild
@@ -97,11 +107,31 @@ var fb2Handler = {
                 } catch(e) {}
             }
 
+            // add listener to all footnote links
             var notelinks = util.getElements("a[@type='note']")
             for ( var i=0 ; i < notelinks.snapshotLength; i++ ) {
                 var note = notelinks.snapshotItem(i)
                 note.addEventListener("mouseover", fb2Handler.tooltip, true)
             }
+
+            // replace external links with xHTML ones, add handler to internal ones
+            var extlinks = util.getElements("a[@type!='note' or not(@type)]")
+            for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
+                var link = extlinks.snapshotItem(i)
+                var href = link.getAttributeNS(XLink_NS, 'href')
+                xlink= doc.createElementNS(xHTML_NS, 'a')
+                xlink.href = href
+                link.parentNode.insertBefore(xlink, link)
+                // move contents
+                while(link.firstChild)
+                    xlink.appendChild(link.firstChild)
+                if (href.slice(0,1) == '#') { 
+                    xlink.addEventListener("click", fb2Handler.internal_link, true)                
+                } else {
+                    xlink.target = "_blank"
+                }
+            }
+            alert("done")
         }
     }
 }

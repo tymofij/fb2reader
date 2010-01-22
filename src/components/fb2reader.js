@@ -84,7 +84,7 @@ FB_Reader.prototype = {
 
         try {
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-            const FB2_REGEX = /.*\.fb2(.zip)?$/g
+            const FB2_REGEX = /.*\.fb2(.zip)?(#.*)?$/g
             if(uri.match(FB2_REGEX)) {
                 dumpln("URI match on "+uri);
                 return "application/fb2";
