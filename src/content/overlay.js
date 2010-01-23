@@ -131,7 +131,6 @@ var fb2Handler = {
                     xlink.target = "_blank"
                 }
             }
-            alert("done")
         }
     }
 }

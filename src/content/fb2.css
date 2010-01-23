@@ -34,7 +34,9 @@ poem {margin-left: 2em}
 stanza {margin-bottom: 0.3em;}
     v {}
 
-/* notes */    
+/* notes */
+body[name="notes"] {display:none;}
+
 a[type='note'] {
     background:#f5f5b5; 
     position:relative;

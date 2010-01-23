@@ -16,6 +16,9 @@ update: $(DESTINATIONS)
 	rm -f $(PROFILE_DIRECTORY)/xpti.dat
 	rm -f $(PROFILE_DIRECTORY)/extensions.*
 
+run: update
+	~/bin/firefox/firefox -P dev -no-remote
+
 xpi:
 	@if test -e $(XPI_FILE) ; then \
 		rm $(XPI_FILE) ;\

@@ -25,6 +25,8 @@ function dumpln(s){
 
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
 
+const NS_ERROR_NOT_AVAILABLE  = Components.results.NS_ERROR_NOT_AVAILABLE;
+
 /* FB2 reader component */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -80,7 +82,7 @@ FB_Reader.prototype = {
                         .getService(Ci.nsIPrefBranch);
  
         if (!prefs.getBoolPref("extensions.fb2reader.enabled"))
-            throw NS_ERROR_NOT_AVAILABLE
+            return null
 
         try {
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
@@ -89,16 +91,24 @@ FB_Reader.prototype = {
                 dumpln("URI match on "+uri);
                 return "application/fb2";
             } else {
-                var type = httpChannel.getResponseHeader("Content-Type");
-                var disposition = httpChannel.getResponseHeader("Content-Disposition");
+                if(request instanceof Ci.nsIHttpChannel) {
+                    var httpChannel = request.QueryInterface(Ci.nsIHttpChannel);            
+                    var type = httpChannel.getResponseHeader("Content-Type");
+                    try {
+                        var disposition = httpChannel.getResponseHeader("Content-Disposition");
 
-                if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
-                    dumpln("type/disposition match on "+uri);
-                    return "application/fb2";
+                        if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
+                            dumpln("type/disposition match on "+uri);
+                            return "application/fb2";
+                        }        
+                    } catch(e) {} // no disposition header
                 }
             }
-        } catch(e) {}
-        throw NS_ERROR_NOT_AVAILABLE
+        } catch(e) {
+            dumpln("Could not look for a mime type for "+request.name);
+            dumpln(e);
+            throw e;        
+        }
     },
 
   
