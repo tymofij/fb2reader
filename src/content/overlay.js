@@ -6,23 +6,21 @@ const xHTML_NS = 'http://www.w3.org/1999/xhtml'
 
 // utility DOM management functions
 var util = {
-    doc: null, // here we will store the document
-
     // see https://developer.mozilla.org/en/Xml/id
     // and http://bit.ly/24gZUo for a reason why it is needed
-    getElements : function (query, resultType, prefix) {
+    getElements : function (doc, query, resultType, prefix) {
         if (resultType == null)
             resultType = XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE
         
         // could use: namespace-uri()='"+FB2_NS+"' and ..
-        return util.doc.evaluate("//fb2:"+query, util.doc.documentElement, 
+        return doc.evaluate("//fb2:"+query, doc.documentElement, 
                     function(){return FB2_NS},
                     resultType, null
                     );
     },
 
-    getSingleElement : function (query) {
-        return util.getElements(query, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
+    getSingleElement : function (doc, query) {
+        return util.getElements(doc, query, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
     },
 
     getHrefVal : function(elem){ // returns id of element XLink ponts to, like l:href="#note1"
@@ -39,27 +37,28 @@ var fb2Handler = {
     },
 
     internal_link: function(event) {
-        fb2Handler.scrollToHref(event.target.href)
+        fb2Handler.scrollToHref(event.target.ownerDocument, event.target.href)
     },
 
-    url_change: function() {
-        fb2Handler.scrollToHref(util.doc.defaultView.location.toString())
+    url_change: function(event) {
+        // even.target is window here
+        fb2Handler.scrollToHref(event.target.document, event.target.location.toString())
     },
 
-    scrollToHref: function(href) {
-        var elem = util.getSingleElement("*[@id='"+href.slice(href.indexOf("#")+1)+"']")
+    scrollToHref: function(doc, href) {
+        var elem = util.getSingleElement(doc, "*[@id='"+href.slice(href.indexOf("#")+1)+"']")
         var pos = elem.getBoundingClientRect()
-        var win = util.doc.defaultView
+        var win = doc.defaultView
         win.scroll(win.scrollX+pos.left, win.scrollY+pos.top)
     },
 
-
     tooltip: function(event) {
         var a = event.target
+        var doc = event.target.ownerDocument
         if (a.nodeName=='a'){
 
             try { // move it here if not yet
-                var note = util.getSingleElement("section[@id='"+util.getHrefVal(a)+"']")
+                var note = util.getSingleElement(doc, "section[@id='"+util.getHrefVal(a)+"']")
                 a.appendChild(note)
             } catch(e) { // just get it
                 var note = a.firstChild
@@ -82,10 +81,9 @@ var fb2Handler = {
         
         var prefs = Cc["@mozilla.org/preferences-service;1"]
                         .getService(Ci.nsIPrefBranch);
- 
+
         if(doc.location.href.search(".fb2") > -1 && 
                     prefs.getBoolPref("extensions.fb2reader.enabled") ) {
-            util.doc = doc                    
             try { // SeaMonkey and Fennec do not have it
                 var browser = gBrowser.getBrowserForDocument(doc)
                 var tabIndex = gBrowser.browsers.indexOf(browser)
@@ -100,12 +98,12 @@ var fb2Handler = {
             } catch(e) {}
 
             // for each fb2 image we will create xHTML one        
-            var images = util.getElements("image")
+            var images = util.getElements(doc, "image")
             for ( var i=0 ; i < images.snapshotLength; i++ ) {
                 try { // ignore malformed images
                     var img = images.snapshotItem(i)
                     // we get corresponding binary node
-                    var bin = util.getSingleElement("binary[@id='"+util.getHrefVal(img)+"']")
+                    var bin = util.getSingleElement(doc, "binary[@id='"+util.getHrefVal(img)+"']")
                     // create xhtml image and set src to its base64 data
                     var ximg = doc.createElementNS(xHTML_NS, 'img')
                     ximg.src='data:'+bin.getAttribute('content-type')+';base64,'+bin.textContent
@@ -114,14 +112,14 @@ var fb2Handler = {
             }
 
             // add listener to all footnote links
-            var notelinks = util.getElements("a[@type='note']")
+            var notelinks = util.getElements(doc, "a[@type='note']")
             for ( var i=0 ; i < notelinks.snapshotLength; i++ ) {
                 var note = notelinks.snapshotItem(i)
                 note.addEventListener("mouseover", fb2Handler.tooltip, true)
             }
 
             // replace external links with xHTML ones, add handler to internal ones
-            var extlinks = util.getElements("a[@type!='note' or not(@type)]")
+            var extlinks = util.getElements(doc, "a[@type!='note' or not(@type)]")
             for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
                 var link = extlinks.snapshotItem(i)
                 var href = link.getAttributeNS(XLink_NS, 'href')
