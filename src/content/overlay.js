@@ -66,11 +66,19 @@ var fb2Handler = {
                     note = note.nextSibling
             } 
 
+            const SCROLLBAR = 16 // I wonder if there is a reliable way to get it
+
             // alters the note box's position_h to keep it on screen
-            if ( note.getBoundingClientRect().right > window.innerWidth )
+            if ( note.getBoundingClientRect().right > window.innerWidth - SCROLLBAR)
                 note.setAttribute('position_h', 'left')
             if ( note.getBoundingClientRect().left < 0 )
                 note.setAttribute('position_h', '')
+
+            // alters the note box's position_v to keep it on screen
+            if ( note.getBoundingClientRect().bottom > window.innerHeight - SCROLLBAR)
+                note.setAttribute('position_v', 'up')
+            if ( note.getBoundingClientRect().top < 0 )
+                note.setAttribute('position_v', '')
         }
     },
 

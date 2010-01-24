@@ -63,3 +63,4 @@ a[type='note'] {
         a[type='note'] section p { margin: 0.1em 0.3em; }
         a[type='note'] section title { display:none; }    
         a[type='note'] section[position_h='left'] { left:auto; right: 0.5em;}
+        a[type='note'] section[position_v='up'] { top:auto; bottom: 0.5em;}        
