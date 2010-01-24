@@ -25,9 +25,8 @@ var util = {
         return util.getElements(query, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue
     },
 
-    getHrefVal : function(elem){
-        var href = elem.getAttributeNS(XLink_NS, 'href')
-        return href.slice(href.indexOf("#")+1)
+    getHrefVal : function(elem){ // returns id of element XLink ponts to, like l:href="#note1"
+        return elem.getAttributeNS(XLink_NS, 'href').slice(1)
     },
 }
 
@@ -40,13 +39,20 @@ var fb2Handler = {
     },
 
     internal_link: function(event) {
-        var a = event.target
-        alert(0)        
-        var elem = util.getSingleElement("p[@id='"+util.getHrefVal(a)+"']")
-        alert(elem)
-        alert(1)
-        return false
+        fb2Handler.scrollToHref(event.target.href)
     },
+
+    url_change: function() {
+        fb2Handler.scrollToHref(util.doc.defaultView.location.toString())
+    },
+
+    scrollToHref: function(href) {
+        var elem = util.getSingleElement("*[@id='"+href.slice(href.indexOf("#")+1)+"']")
+        var pos = elem.getBoundingClientRect()
+        var win = util.doc.defaultView
+        win.scroll(win.scrollX+pos.left, win.scrollY+pos.top)
+    },
+
 
     tooltip: function(event) {
         var a = event.target
@@ -72,7 +78,6 @@ var fb2Handler = {
     onPageLoad: function(event) {
         // that is the document that triggered event
         var doc = event.originalTarget
-        util.doc = doc
         // execute for FictionBook only
         
         var prefs = Cc["@mozilla.org/preferences-service;1"]
@@ -80,6 +85,7 @@ var fb2Handler = {
  
         if(doc.location.href.search(".fb2") > -1 && 
                     prefs.getBoolPref("extensions.fb2reader.enabled") ) {
+            util.doc = doc                    
             try { // SeaMonkey and Fennec do not have it
                 var browser = gBrowser.getBrowserForDocument(doc)
                 var tabIndex = gBrowser.browsers.indexOf(browser)
@@ -126,11 +132,15 @@ var fb2Handler = {
                 while(link.firstChild)
                     xlink.appendChild(link.firstChild)
                 if (href.slice(0,1) == '#') { 
-                    xlink.addEventListener("click", fb2Handler.internal_link, true)                
+                        xlink.addEventListener("click", fb2Handler.internal_link, true)
                 } else {
                     xlink.target = "_blank"
                 }
             }
+            
+            // will scroll when back-forward clicked, Gecko 1.9.2 only
+            if ("onhashchange" in doc.defaultView)
+                doc.defaultView.addEventListener("hashchange", fb2Handler.url_change, true)
         }
     }
 }
