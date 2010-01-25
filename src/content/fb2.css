@@ -9,8 +9,10 @@ annotation {margin-left: 40%; font-size:smaller;}
 annotation > *:first-child {margin-top:0}
 
 /* those are blocky */
-section, title, p, cite, epigraph, poem, stanza, v {display: block; }
+section, title, p, cite, epigraph, poem, stanza, v, empty-line {display: block; }
 p { margin: 1em 0; }
+
+empty-line {margin: 1em 0;}
 
 body > title {font-size: x-large; }
 title {font-size: large;}
