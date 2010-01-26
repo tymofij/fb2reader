@@ -10,7 +10,7 @@ annotation > *:first-child {margin-top:0}
 
 /* those are blocky */
 section, title, p, cite, epigraph, poem, stanza, v, empty-line {display: block; }
-p { margin: 1em 0; }
+p { margin: 0; text-indent:3em; }
 
 empty-line {margin: 1em 0;}
 

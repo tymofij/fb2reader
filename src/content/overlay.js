@@ -87,12 +87,13 @@ var fb2 = {
 
         var doc = event.originalTarget
         // execute for FictionBook only
-        
-        var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                        .getService(Components.interfaces.nsIPrefBranch);
 
-        if(doc.location.href.search(".fb2") > -1 && 
-                    prefs.getBoolPref("extensions.fb2reader.enabled") ) {
+        var prefs = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService)
+        prefs = prefs.getBranch("extensions.fb2reader.")
+
+        if(doc.location.href.search(".fb2") > -1 && prefs.getBoolPref("enabled") ) {
+           
             try { // SeaMonkey and Fennec do not have it
                 var browser = gBrowser.getBrowserForDocument(doc)
                 var tabIndex = gBrowser.browsers.indexOf(browser)
