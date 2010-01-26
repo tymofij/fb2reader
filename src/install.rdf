@@ -14,7 +14,7 @@
     <em:optionsURL>chrome://fb2reader/content/options.xul</em:optionsURL>
     <em:homepageURL>http://clear.com.ua/projects/fb2reader/</em:homepageURL>
 
-<em:updateURL>http://firefox.org.ua/xpi/update.rdf?addon=fb2reader&amp;v=</em:updateURL>
+<em:updateURL>http://firefox.org.ua/xpi/update.rdf?addon=fb2reader&amp;v=0.9.2</em:updateURL>
 <em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvo8ymuukJWnlvl1g54GIDxGTLSCXfT6EquebVszdnPrs75OofxCO6E4ResRXxGPHW/H9I00wyR5sHpuvDDQT3vk/JRmXOgXEQ4ttBwWrHKjPTOxJDOC7iHG5qErCCbzxrFgFE7uuGLrBAg0jU6/s5RRNat4/eG/NsK98fIiyVxwIDAQAB</em:updateKey>
 
     <!-- Firefox -->
@@ -38,7 +38,7 @@
     <em:localized>
       <Description>
         <em:locale>uk</em:locale>
-        <em:name>Читалка FB2</em:name>
+        <em:name>FB2 читалка</em:name>
         <em:creator>Тимофій Бабич</em:creator>
         <em:description>Читайте електронні книжки FB2 просто з Firefox’а.</em:description>
       </Description>
@@ -46,8 +46,8 @@
    
     <em:localized>
       <Description>
-        <em:locale>uk</em:locale>
-        <em:name>Читалка FB2</em:name>
+        <em:locale>ru</em:locale>
+        <em:name>FB2 читалка</em:name>
         <em:creator>Тимофей Бабич</em:creator>
         <em:description>Читайте електронные книги FB2 прямо из Firefox’а.</em:description>
       </Description>

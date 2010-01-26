@@ -44,7 +44,7 @@
                 <em:maxVersion>3.6.*</em:maxVersion>
                 <!-- This is where this version of the add-on will be downloaded from -->
                 <em:updateLink>http://firefox.org.ua/xpi/fb2reader.xpi</em:updateLink>
-                <em:updateHash>sha1:2a6641df1e0a0549b5d1a36c99f925f7a4227be8</em:updateHash>
+                <em:updateHash>sha1:43ea5769e6c4b326ecf07a9f6f495b034d04d608</em:updateHash>
                 
                 <!-- A page describing what is new in this updated version -->
                 <em:updateInfoURL>http://www.firefox.org.ua/xpi/fb2reader-0.9.2.xhtml</em:updateInfoURL>
