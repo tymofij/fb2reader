@@ -5,7 +5,7 @@ description title-info > *, document-info, src-title-info, publish-info, custom-
 /* but show coverpage and the annotation  */
 coverpage, annotation {display:block !important;} 
 
-annotation {margin-left: 40%; font-size:smaller;}
+annotation {margin: 0 0 0.4em 40%; font-size:smaller;}
 annotation > *:first-child {margin-top:0}
 
 /* those are blocky */
@@ -17,8 +17,9 @@ empty-line {margin: 1em 0;}
 body > title {font-size: x-large; }
 title {font-size: large;}
     title p {margin: 0.3em 0;}
+title, title p, subtitle {text-align: center; text-indent: 0;}
+
 subtitle {font-weight:bold;}
-title, title p, subtitle {text-align: center;}
 
 /* visuals */
 emphasis {font-style: italic;}
@@ -35,8 +36,8 @@ epigraph {margin-left: 60%;}
 text-author {margin-left: 5em;}
 
 /* poems */
-poem {margin-left: 2em}
-stanza {margin-bottom: 0.3em;}
+poem {margin-left: 20%}
+stanza {margin: 0.3em 0;}
     v {}
 
 img {display: block; margin: 0 auto;}
@@ -77,7 +78,11 @@ a[type='note'] {
         overflow-y: auto;
         -moz-box-shadow: 3px 3px 5px silver;  
         }
-        a[type='note'] section p { margin: 0.1em 0.3em; }
+        a[type='note'] section p {
+            margin: 0.1em 0.3em;
+            text-align: left;
+            text-indent: 0;
+            }
         a[type='note'] section title { display:none; }    
         a[type='note'] section[position_h='left'] { left:auto; right: 0.5em;}
         a[type='note'] section[position_v='up'] { top:auto; bottom: 0.5em;}        
