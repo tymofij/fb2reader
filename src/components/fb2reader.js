@@ -63,7 +63,8 @@ FB_Reader.prototype = {
     data: null,
     listener: null,
     channel: null,
-
+    charset: null,
+    title: null,
 
     /*
     * This component works as such:
@@ -72,8 +73,6 @@ FB_Reader.prototype = {
     * 3. onDataAvailable transcodes the data into a UTF-8 string
     * 4. onStopRequest gets the collected data and converts it, spits it to the listener
     */
-
-
     // nsIContentSniffer::getMIMETypeFromContent
     getMIMETypeFromContent: function(request, data) {
         // sets mime type for .fb2 and fb.* files
@@ -225,7 +224,14 @@ FB_Reader.prototype = {
                 if (bookTree.getElementsByTagName("FictionBook").length == 0) {
                     throw "error_xml"
                 }
-
+                
+                // lets find out and set book title for the history
+                title_tags = bookTree.getElementsByTagName("book-title")
+                if (title_tags.length != 0) {
+                    this.title = title_tags[0].textContent;
+                    dumpln("title found: "+this.title)
+                }
+                
                 // add our CSS to the document
                 var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
                 bookTree.insertBefore(pi, bookTree.documentElement);
@@ -262,6 +268,15 @@ FB_Reader.prototype = {
             output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
             // create the stream from which original channel listener will get what we gave it
             var in_stream = storage.newInputStream(0);
+
+            // write title to the history
+            if (this.title) {
+                history = Cc["@mozilla.org/browser/nav-history-service;1"].getService(Ci.nsIGlobalHistory2);
+                history.QueryInterface(Ci.nsIGlobalHistory2);
+                var uri = request.QueryInterface(Ci.nsIChannel).URI; 
+                history.setPageTitle(uri, this.title);
+            }
+            
 
             // Pass the data to the main content listener
             this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);

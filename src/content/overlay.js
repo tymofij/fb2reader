@@ -93,19 +93,15 @@ var fb2 = {
         prefs = prefs.getBranch("extensions.fb2reader.")
 
         if(doc.location.href.search(".fb2") > -1 && prefs.getBoolPref("enabled") ) {
-           
-            try { // SeaMonkey and Fennec do not have it
-                var browser = gBrowser.getBrowserForDocument(doc)
+            try { // SeaMonkey and Fennec do not have bBrowser
+                browser = gBrowser.getBrowserForDocument(doc)
                 var tabIndex = gBrowser.browsers.indexOf(browser)
                 tab = gBrowser.tabContainer.childNodes[tabIndex]
 
-                // change favicon on the tab
-                var img = document.getAnonymousElementByAttribute(tab, "class", "tab-icon-image")
-                img.src="chrome://fb2reader/skin/icon-16.png"
-                // assign title to the tab
-                var lbl = document.getAnonymousElementByAttribute(tab, "class", "tab-text")
-                lbl.value = doc.getElementsByTagName("book-title")[0].textContent
-            } catch(e) {}
+                gBrowser.setIcon(tab, "chrome://fb2reader/skin/icon-16.png");
+                tab.label = doc.getElementsByTagName("book-title")[0].textContent;
+
+            } catch(e) {alert(e)}
 
             // for each fb2 image we will create xHTML one        
             var images = fb2.getElements(doc, "image")
