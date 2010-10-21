@@ -19,6 +19,10 @@ update: $(DESTINATIONS)
 run: update
 	~/bin/firefox/firefox -P dev -no-remote
 
+36: update
+	~/bin/firefox-3.6/firefox -P dev -no-remote
+
+
 xpi:
 	@if test -e $(XPI_FILE) ; then \
 		rm $(XPI_FILE) ;\

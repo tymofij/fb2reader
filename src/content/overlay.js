@@ -66,7 +66,7 @@ var fb2 = {
                     note = note.nextSibling
             } 
 
-            const SCROLLBAR = 16 // I wonder if there is a reliable way to get it
+            const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
 
             // alters the note box's position_h to keep it on screen
             if ( note.getBoundingClientRect().right > window.innerWidth - SCROLLBAR)

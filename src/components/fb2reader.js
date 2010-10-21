@@ -271,9 +271,13 @@ FB_Reader.prototype = {
 
 };
 
-/* register component */
-var components = [FB_Reader];
 
-function NSGetModule(compMgr, fileSpec){
-   return XPCOMUtils.generateModule(components, function(){}, function(){});
-}
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+if (XPCOMUtils.generateNSGetFactory)
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([FB_Reader]);
+else
+    var NSGetModule = XPCOMUtils.generateNSGetModule([FB_Reader]);
+

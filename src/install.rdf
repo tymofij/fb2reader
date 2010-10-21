@@ -6,7 +6,7 @@
 
     <em:id>fb2reader@clear.com.ua</em:id>
     <em:name>FB2 Reader</em:name>
-    <em:version>0.9.3</em:version>
+    <em:version>0.9.4</em:version>
     <em:creator>Timothy Babych</em:creator>
     <em:description>Read FB2 e-Books with Firefox</em:description>
     <!-- Firefox 3.6 does not need it, btw -->
@@ -22,7 +22,7 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>3.7.*</em:maxVersion>
+        <em:maxVersion>4.0.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
