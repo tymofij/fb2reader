@@ -42,7 +42,6 @@ prep: xpi
 	rm tmp
 	cp updates/update.rdf .
 
-	
 release: 
 	# make prep and sign updates.rdf with mccoy 
 	scp fb2reader.xpi update.rdf updates/fb2reader-$(VERSION).xhtml tim@clear.com.ua:~/public_html.firefox/xpi/
