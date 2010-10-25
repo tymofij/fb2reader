@@ -24,7 +24,7 @@ function dumpln(s){
 }
 
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
-const FB2_REGEX = /\.fb2(.zip)?(#.*)?$/g
+const FB2_REGEX = /\.fb2(.zip)?(#.*)?[\'\"]?$/g
 
 const NS_ERROR_NOT_AVAILABLE  = Components.results.NS_ERROR_NOT_AVAILABLE;
 
@@ -85,27 +85,31 @@ FB_Reader.prototype = {
             return null
 
         try {
+            isFb2 = false
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
             if(uri.match(FB2_REGEX)) {
                 dumpln("URI match on "+uri);
-                return "application/fb2";
-            } else {
-                if(request instanceof Ci.nsIHttpChannel) {
-                    var httpChannel = request.QueryInterface(Ci.nsIHttpChannel);            
-                    var type = httpChannel.getResponseHeader("Content-Type");
-                    try {
-                        var disposition = httpChannel.getResponseHeader("Content-Disposition");
-                        if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
-                            dumpln("type/disposition match on "+uri);
-                            return "application/fb2";
-                        }        
-                    } catch(e) {} // no disposition header
-                }
+                isFb2 = true;
+            }
+            if(request instanceof Ci.nsIHttpChannel) {
+                var httpChannel = request.QueryInterface(Ci.nsIHttpChannel);
+                var type = httpChannel.getResponseHeader("Content-Type");
+                try {
+                    var disposition = httpChannel.getResponseHeader("Content-Disposition");
+                    if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
+                        dumpln("type/disposition match on "+uri);
+                        httpChannel.setResponseHeader("Content-Disposition", "", false);
+                        isFb2 = true;
+                    }
+                } catch(e) {} // no disposition header
+            }
+            if (isFb2) {
+                return "application/fb2"
             }
         } catch(e) {
             dumpln("Could not look for a mime type for "+request.name);
             dumpln(e);
-            throw e;        
+            throw e;
         }
     },
 
