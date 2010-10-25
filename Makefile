@@ -7,7 +7,7 @@ PROFILE_DIRECTORY="/home/tim/.mozilla/firefox/dev"
 INSTALL_DIRECTORY="$(PROFILE_DIRECTORY)/extensions/fb2reader@clear.com.ua"
 
 XPI_FILE="fb2reader.xpi"
-VERSION="0.9.2"
+VERSION="0.10"
 
 update: $(DESTINATIONS)
 	rm -Rf $(INSTALL_DIRECTORY)/*

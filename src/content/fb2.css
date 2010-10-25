@@ -25,8 +25,8 @@ subtitle {font-weight:bold;}
 emphasis {font-style: italic;}
 strong {font-weight:bold;}
 strikethrough { text-decoration: line-through; }
-sub {vertical-align: sub;font-size: smaller;}
-sup {vertical-align: super;font-size: smaller;}
+sub {vertical-align: sub;font-size: xx-small;}
+sup {vertical-align: super;font-size: xx-small;}
 code {white-space: pre; font-family: monospace;} 
 
 /* citations and epigraphs */

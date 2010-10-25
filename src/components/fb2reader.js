@@ -24,6 +24,7 @@ function dumpln(s){
 }
 
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
+const FB2_REGEX = /\.fb2(.zip)?(#.*)?$/g
 
 const NS_ERROR_NOT_AVAILABLE  = Components.results.NS_ERROR_NOT_AVAILABLE;
 
@@ -85,7 +86,6 @@ FB_Reader.prototype = {
 
         try {
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-            const FB2_REGEX = /.*\.fb2(.zip)?(#.*)?$/g
             if(uri.match(FB2_REGEX)) {
                 dumpln("URI match on "+uri);
                 return "application/fb2";
@@ -95,7 +95,6 @@ FB_Reader.prototype = {
                     var type = httpChannel.getResponseHeader("Content-Type");
                     try {
                         var disposition = httpChannel.getResponseHeader("Content-Disposition");
-
                         if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
                             dumpln("type/disposition match on "+uri);
                             return "application/fb2";
@@ -276,7 +275,6 @@ FB_Reader.prototype = {
                 var uri = request.QueryInterface(Ci.nsIChannel).URI; 
                 history.setPageTitle(uri, this.title);
             }
-            
 
             // Pass the data to the main content listener
             this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);

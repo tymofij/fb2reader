@@ -1,8 +1,11 @@
 window.addEventListener("load", function() { fb2.init(); }, false)
 
 const FB2_NS   = 'http://www.gribuser.ru/xml/fictionbook/2.0'
+const FB2_REGEX = /\.fb2(.zip)?(#.*)?$/g
 const XLink_NS = 'http://www.w3.org/1999/xlink'
 const xHTML_NS = 'http://www.w3.org/1999/xhtml'
+
+const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
 
 var fb2 = {
 
@@ -66,8 +69,6 @@ var fb2 = {
                     note = note.nextSibling
             } 
 
-            const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
-
             // alters the note box's position_h to keep it on screen
             if ( note.getBoundingClientRect().right > window.innerWidth - SCROLLBAR)
                 note.setAttribute('position_h', 'left')
@@ -92,7 +93,10 @@ var fb2 = {
                     .getService(Components.interfaces.nsIPrefService)
         prefs = prefs.getBranch("extensions.fb2reader.")
 
-        if(doc.location.href.search(".fb2") > -1 && prefs.getBoolPref("enabled") ) {
+        if( doc.location.href.match(FB2_REGEX) && 
+            doc.getElementsByTagName("FictionBook").length != 0 &&
+            prefs.getBoolPref("enabled") ) {
+
             try { // SeaMonkey and Fennec do not have bBrowser
                 browser = gBrowser.getBrowserForDocument(doc)
                 var tabIndex = gBrowser.browsers.indexOf(browser)
