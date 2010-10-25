@@ -277,6 +277,9 @@ FB_Reader.prototype = {
                 history = Cc["@mozilla.org/browser/nav-history-service;1"].getService(Ci.nsIGlobalHistory2);
                 history.QueryInterface(Ci.nsIGlobalHistory2);
                 var uri = request.QueryInterface(Ci.nsIChannel).URI; 
+                if (!history.isVisited(uri)) {
+                    history.addURI(uri, false, true, null);
+                }
                 history.setPageTitle(uri, this.title);
             }
 
@@ -289,12 +292,8 @@ FB_Reader.prototype = {
 };
 
 
-/**
-* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
-* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
-*/
-if (XPCOMUtils.generateNSGetFactory)
+if (XPCOMUtils.generateNSGetFactory) // Firefox 4
     var NSGetFactory = XPCOMUtils.generateNSGetFactory([FB_Reader]);
-else
+else // others
     var NSGetModule = XPCOMUtils.generateNSGetModule([FB_Reader]);
 
