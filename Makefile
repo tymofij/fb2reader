@@ -7,7 +7,7 @@ PROFILE_DIRECTORY="/home/tim/.mozilla/firefox/dev"
 INSTALL_DIRECTORY="$(PROFILE_DIRECTORY)/extensions/fb2reader@clear.com.ua"
 
 XPI_FILE="fb2reader.xpi"
-VERSION="0.12"
+VERSION="0.13"
 
 update: $(DESTINATIONS)
 	rm -Rf $(INSTALL_DIRECTORY)/*
@@ -23,17 +23,17 @@ run: update
 	~/bin/firefox-3.6/firefox -P dev -no-remote
 
 xpi:
+	sed -e "s/<em:version>.*<\/em:version>/<em:version>$(VERSION)<\/em:version>/" \
+	    -e "s/amp;v=[0-9\.]\+/amp;v=$(VERSION)/" \
+	    src/install.rdf > tmp
+	cat tmp > src/install.rdf
+	rm tmp
 	@if test -e $(XPI_FILE) ; then \
 		rm $(XPI_FILE) ;\
 	fi	
 	cd src && zip -r9 ../$(XPI_FILE) *
 
 prep: xpi
-	sed -e "s/<em:version>.*<\/em:version>/<em:version>$(VERSION)<\/em:version>/" \
-	    -e "s/amp;v=[0-9\.]\+/amp;v=$(VERSION)/" \
-	    src/install.rdf > tmp
-	cat tmp > src/install.rdf
-	rm tmp
 	sed -e "s/<em:version>.*<\/em:version>/<em:version>$(VERSION)<\/em:version>/" \
 	    -e "s/-[0-9\.]\+.xhtml/-$(VERSION).xhtml/" \
 	    -e "s/<em:updateHash>.*<\/em:updateHash>/<em:updateHash>sha1:`sha1sum $(XPI_FILE) | awk '{print $$1}'`<\/em:updateHash>/" \

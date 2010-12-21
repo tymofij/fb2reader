@@ -5,6 +5,7 @@ syntax: glob
 *.swp
 build
 *.xpi
+update.rdf
 # switch to regexp syntax.
 syntax: regexp
 

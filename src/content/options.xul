@@ -9,7 +9,18 @@
 <prefpane>
 <preferences>
   <preference id="pref_enabled" name="extensions.fb2reader.enabled" type="bool"/>
+  <preference id="pref_booky" name="extensions.fb2reader.booky_p" type="bool"/>  
 </preferences>
+
+<groupbox>
+  <caption label="&preferences.paragraphs;"/>
+    <radiogroup orient="horizontal" preference="pref_booky">  
+        <radio value="false" src="chrome://fb2reader/skin/p_normal.png" />
+        <radio value="true"  src="chrome://fb2reader/skin/p_booky.png" />
+    </radiogroup>  
+</groupbox>
+
+<spacer/>
 <checkbox label="&preferences.enabled;" preference="pref_enabled"/>
 </prefpane>
 </prefwindow>

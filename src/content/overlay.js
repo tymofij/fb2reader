@@ -107,6 +107,11 @@ var fb2 = {
 
             } catch(e) {alert(e)}
 
+            // set booky paragraphs
+            if (prefs.getBoolPref("booky_p") ) {
+                doc.getElementsByTagName("FictionBook")[0].setAttribute('class', 'booky_p')
+            }
+            
             // for each fb2 image we will create xHTML one        
             var images = fb2.getElements(doc, "image")
             for ( var i=0 ; i < images.snapshotLength; i++ ) {

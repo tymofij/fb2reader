@@ -1,4 +1,8 @@
-FictionBook {padding: 2em;}
+FictionBook {
+    padding: 2em;
+    max-width: 50em;
+    margin: 0 auto !important;
+    }
 
 /* hide metadata */
 description title-info > *, document-info, src-title-info, publish-info, custom-info, binary {display: none; }
@@ -10,7 +14,14 @@ annotation > *:first-child {margin-top:0}
 
 /* those are blocky */
 section, title, subtitle, p, cite, epigraph, poem, stanza, v, empty-line {display: block; }
-p { margin: 0; text-indent:3em; text-align: justify; }
+
+/* paragraphs */
+p { text-align: justify; }
+/* browser-style, default */
+p { margin: 1em 0; text-indent: 0; }
+
+/* book-style */
+FictionBook[class='booky_p'] p { margin: 0; text-indent:3em; }
 
 empty-line {margin: 1em 0;}
 
@@ -73,7 +84,8 @@ a[type='note'] {
         border: 1px solid #baba45;
         font-size: small;
         font-family: sans-serif;
-        width: 20em;
+        width: -moz-max-content;
+        max-width: 20em;
         max-height:20em;
         overflow-y: auto;
         -moz-box-shadow: 3px 3px 5px silver;  
