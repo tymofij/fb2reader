@@ -7,9 +7,9 @@ PROFILE_DIRECTORY="/home/tim/.mozilla/firefox/dev"
 INSTALL_DIRECTORY="$(PROFILE_DIRECTORY)/extensions/fb2reader@clear.com.ua"
 
 XPI_FILE="fb2reader.xpi"
-VERSION="0.13"
+VERSION="0.14"
 
-update: $(DESTINATIONS)
+update: versionize_rdf $(DESTINATIONS)
 	rm -Rf $(INSTALL_DIRECTORY)/*
 	cp -R src/* $(INSTALL_DIRECTORY)
 	rm -f $(PROFILE_DIRECTORY)/compreg.dat
@@ -22,26 +22,26 @@ run: update
 36: update
 	~/bin/firefox-3.6/firefox -P dev -no-remote
 
-xpi:
-	sed -e "s/<em:version>.*<\/em:version>/<em:version>$(VERSION)<\/em:version>/" \
-	    -e "s/amp;v=[0-9\.]\+/amp;v=$(VERSION)/" \
+versionize_rdf:
+	sed -e "s/&VERSION/$(VERSION)/" \
 	    src/install.rdf > tmp
 	cat tmp > src/install.rdf
 	rm tmp
+
+xpi: versionize_rdf
 	@if test -e $(XPI_FILE) ; then \
 		rm $(XPI_FILE) ;\
 	fi	
 	cd src && zip -r9 ../$(XPI_FILE) *
 
 prep: xpi
-	sed -e "s/<em:version>.*<\/em:version>/<em:version>$(VERSION)<\/em:version>/" \
-	    -e "s/-[0-9\.]\+.xhtml/-$(VERSION).xhtml/" \
-	    -e "s/<em:updateHash>.*<\/em:updateHash>/<em:updateHash>sha1:`sha1sum $(XPI_FILE) | awk '{print $$1}'`<\/em:updateHash>/" \
-	    updates/update.rdf > tmp
-	cat tmp > updates/update.rdf
-	rm tmp
-	cp updates/update.rdf .
+	sed -e "s/VERSION/$(VERSION)/" \
+	    -e "s/SHA1SUM/`sha1sum $(XPI_FILE) | awk '{print $$1}'`/" \
+	    updates/update.rdf > updates.rdf
 
 release: 
 	# make prep and sign updates.rdf with mccoy 
-	scp fb2reader.xpi update.rdf updates/fb2reader-$(VERSION).xhtml tim@clear.com.ua:~/public_html.firefox/xpi/
+	sed -e "s/VERSION/$(VERSION)/" \
+	    -e "s/DATE/`date +%F`/" updates/changes.xhtml > changes.xhtml
+	scp fb2reader.xpi update.rdf changes.xhtml tim@clear.com.ua:~/public_html.firefox/xpi/
+	rm changes.xhtml updates.rdf

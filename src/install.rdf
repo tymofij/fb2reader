@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
-   
+
 <Description about="urn:mozilla:install-manifest">
 
     <em:id>fb2reader@clear.com.ua</em:id>
     <em:name>FB2 Reader</em:name>
-    <em:version>0.13</em:version>
+    <em:version>0.14</em:version>
     <em:creator>Timothy Babych</em:creator>
     <em:description>Read FB2 e-Books with Firefox</em:description>
-    <!-- Firefox 3.6 does not need it, btw -->
-    <em:iconURL>chrome://fb2reader/skin/icon.png</em:iconURL>
+    <!-- To serve Firefox 3 with proper 32x32 icon -->
+    <em:iconURL>chrome://fb2reader_icon/skin/icon.png</em:iconURL>
     <em:optionsURL>chrome://fb2reader/content/options.xul</em:optionsURL>
-    <em:homepageURL>http://clear.com.ua/projects/fb2reader/</em:homepageURL>
+    <em:homepageURL>http://clear.com.ua/en/projects/firefox/fb2reader</em:homepageURL>
 
-<em:updateURL>http://firefox.org.ua/xpi/update.rdf?addon=fb2reader&amp;v=0.13</em:updateURL>
+<em:updateURL>http://firefox.org.ua/xpi/update.rdf?addon=fb2reader&amp;v=%ITEM_VERSION%</em:updateURL>
 <em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvo8ymuukJWnlvl1g54GIDxGTLSCXfT6EquebVszdnPrs75OofxCO6E4ResRXxGPHW/H9I00wyR5sHpuvDDQT3vk/JRmXOgXEQ4ttBwWrHKjPTOxJDOC7iHG5qErCCbzxrFgFE7uuGLrBAg0jU6/s5RRNat4/eG/NsK98fIiyVxwIDAQAB</em:updateKey>
 
     <!-- Firefox -->
@@ -41,15 +41,17 @@
         <em:name>FB2 читалка</em:name>
         <em:creator>Тимофій Бабич</em:creator>
         <em:description>Читайте електронні книжки FB2 просто з Firefox’а.</em:description>
+        <em:homepageURL>http://clear.com.ua/projects/firefox/fb2reader</em:homepageURL>
       </Description>
     </em:localized>
-   
+
     <em:localized>
       <Description>
         <em:locale>ru</em:locale>
         <em:name>FB2 читалка</em:name>
         <em:creator>Тимофей Бабич</em:creator>
         <em:description>Читайте електронные книги FB2 прямо из Firefox’а.</em:description>
+        <em:homepageURL>http://clear.com.ua/ru/projects/firefox/fb2reader</em:homepageURL>
       </Description>
     </em:localized>
 

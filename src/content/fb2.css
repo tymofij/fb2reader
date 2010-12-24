@@ -7,7 +7,7 @@ FictionBook {
 /* hide metadata */
 description title-info > *, document-info, src-title-info, publish-info, custom-info, binary {display: none; }
 /* but show coverpage and the annotation  */
-coverpage, annotation {display:block !important;} 
+coverpage, annotation {display:block !important;}
 
 annotation {margin: 0 0 0.4em 40%; font-size:smaller;}
 annotation > *:first-child {margin-top:0}
@@ -47,8 +47,8 @@ epigraph {margin-left: 60%;}
 text-author {margin-left: 5em;}
 
 /* poems */
-poem {margin-left: 20%}
-stanza {margin: 0.3em 0;}
+poem {margin-left: 10%}
+stanza {margin: 0.5em 0;}
     v {}
 
 img {display: block; margin: 0 auto;}
@@ -64,23 +64,22 @@ table {display: table; border-collapse: collapse; margin: 0 auto;}
     td[align="right"], th[align="right"] {text-align: right;}
     td[align="center"], th[align="center"] {text-align: center;}
 
-
 /* notes */
 body[name="notes"] {display:none;}
 
 a[type='note'] {
-    background:#f5f5b5; 
+    background:#f5f5b5;
     position:relative;
     cursor: help;
     }
     a[type='note']:hover section {display:block; }
     a[type='note'] section {
         cursor: default;
-        z-index:2;    
+        z-index:2;
         position: absolute;
         top:0.5em; left: 0.5em;
-        display:none; 
-        background: #f5f5b5; 
+        display:none;
+        background: #f5f5b5;
         border: 1px solid #baba45;
         font-size: small;
         font-family: sans-serif;
@@ -88,13 +87,13 @@ a[type='note'] {
         max-width: 20em;
         max-height:20em;
         overflow-y: auto;
-        -moz-box-shadow: 3px 3px 5px silver;  
+        -moz-box-shadow: 3px 3px 5px silver;
         }
         a[type='note'] section p {
             margin: 0.1em 0.3em;
             text-align: left;
             text-indent: 0;
             }
-        a[type='note'] section title { display:none; }    
+        a[type='note'] section title { display:none; }
         a[type='note'] section[position_h='left'] { left:auto; right: 0.5em;}
-        a[type='note'] section[position_v='up'] { top:auto; bottom: 0.5em;}        
+        a[type='note'] section[position_v='up'] { top:auto; bottom: 0.5em;}
