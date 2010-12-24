@@ -2,8 +2,7 @@ component {99889a2c-d14c-11de-a670-d332511dc9a9} components/fb2reader.js
 contract @mozilla.org/streamconv;1?from=application/fb2&to=*/* {99889a2c-d14c-11de-a670-d332511dc9a9}
 category net-content-sniffers FB_Reader @mozilla.org/streamconv;1?from=application/fb2&to=*/*
 
-content fb2reader           content/  contentaccessible=yes
-
+content fb2reader                content/     contentaccessible=yes
 skin    fb2reader       default  skin/
 skin    fb2reader_icon  default  skin/icon/3/ appversion<3.7
 skin    fb2reader_icon  default  skin/icon/4/ appversion>=3.7

@@ -236,7 +236,7 @@ FB_Reader.prototype = {
                 }
                 
                 // add our CSS to the document
-                var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/content/fb2.css" type="text/css"');
+                var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/skin/fb2.css" type="text/css"');
                 bookTree.insertBefore(pi, bookTree.documentElement);
 
             } catch (e) {

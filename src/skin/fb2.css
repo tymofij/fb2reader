@@ -1,8 +1,14 @@
+@namespace "http://www.gribuser.ru/xml/fictionbook/2.0";
+@namespace html "http://www.w3.org/1999/xhtml";
+
 FictionBook {
+    display: block;
     padding: 2em;
     max-width: 50em;
-    margin: 0 auto !important;
+    margin: 0 auto;
     }
+
+html|img {display: block; margin: 0 auto;}
 
 /* hide metadata */
 description title-info > *, document-info, src-title-info, publish-info, custom-info, binary {display: none; }
@@ -50,8 +56,6 @@ text-author {margin-left: 5em;}
 poem {margin-left: 10%}
 stanza {margin: 0.5em 0;}
     v {}
-
-img {display: block; margin: 0 auto;}
 
 table {display: table; border-collapse: collapse; margin: 0 auto;}
     tr {display: table-row;}
