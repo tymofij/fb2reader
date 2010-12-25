@@ -13,6 +13,9 @@ skin    fb2reader_icon  default  skin/icon/4/ appversion>3.6.*  application={ec8
 skin    fb2reader_icon  default  skin/icon/3/ appversion<=2.0.* application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
 skin    fb2reader_icon  default  skin/icon/4/ appversion>2.0.*  application={92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}
 
+# Fennec
+skin    fb2reader_icon  default  skin/icon/3/ application={a23983c0-fd0e-11dc-95ff-0800200c9a66}
+
 overlay chrome://browser/content/browser.xul      chrome://fb2reader/content/overlay.xul
 overlay chrome://navigator/content/navigator.xul  chrome://fb2reader/content/overlay.xul
 
