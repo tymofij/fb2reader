@@ -97,16 +97,6 @@ var fb2 = {
             doc.getElementsByTagName("FictionBook").length != 0 &&
             prefs.getBoolPref("enabled") ) {
 
-            try { // SeaMonkey and Fennec do not have bBrowser
-                browser = gBrowser.getBrowserForDocument(doc)
-                var tabIndex = gBrowser.browsers.indexOf(browser)
-                tab = gBrowser.tabContainer.childNodes[tabIndex]
-
-                gBrowser.setIcon(tab, "chrome://fb2reader/skin/icon-16.png");
-                tab.label = doc.getElementsByTagName("book-title")[0].textContent;
-
-            } catch(e) {alert(e)}
-
             // set booky paragraphs
             if (prefs.getBoolPref("booky_p") ) {
                 doc.getElementsByTagName("FictionBook")[0].setAttribute('class', 'booky_p')

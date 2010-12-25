@@ -227,17 +227,25 @@ FB_Reader.prototype = {
                 if (bookTree.getElementsByTagName("FictionBook").length == 0) {
                     throw "error_xml"
                 }
+
+                // we will find kind HTML parent to adopt this kid
+                var XHR = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
+                XHR.open ("GET", "chrome://fb2reader/content/view_book.xhtml", false); // synchronous load
+                XHR.overrideMimeType("text/xml");
+                XHR.send(null);
+                bookHTML = XHR.responseXML
                 
                 // lets find out and set book title for the history
                 title_tags = bookTree.getElementsByTagName("book-title")
                 if (title_tags.length != 0) {
                     this.title = title_tags[0].textContent;
-                    dumpln("title found: "+this.title)
+                    bookHTML.getElementsByTagName('title')[0].textContent = this.title; 
+                    dumpln("title found: " + this.title)
                 }
                 
-                // add our CSS to the document
-                var pi = bookTree.createProcessingInstruction('xml-stylesheet', 'href="chrome://fb2reader/skin/fb2.css" type="text/css"');
-                bookTree.insertBefore(pi, bookTree.documentElement);
+                // sweet moment of reunion
+                FbInHTML = bookHTML.adoptNode(bookTree.getElementsByTagName('FictionBook')[0])
+                bookHTML.getElementsByTagName('body')[0].appendChild(FbInHTML)
 
             } catch (e) {
                 dumpln(e)
@@ -248,11 +256,11 @@ FB_Reader.prototype = {
         } catch(e) {
             dumpln("===========")
             dumpln(e)
-            var errorDoc = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
-            errorDoc.open ("GET", "chrome://fb2reader/content/"+e+".xhtml", false); // synchronous load
-            errorDoc.overrideMimeType("text/xml");
-            errorDoc.send(null);
-            bookTree = errorDoc.responseXML
+            var XHR = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
+            XHR.open ("GET", "chrome://fb2reader/content/"+e+".xhtml", false); // synchronous load
+            XHR.overrideMimeType("text/xml");
+            XHR.send(null);
+            bookHTML = XHR.responseXML
             dumpln("-----------")
 
         // lets output the XML, be it error or the book
@@ -268,10 +276,11 @@ FB_Reader.prototype = {
             var serializer = Cc["@mozilla.org/xmlextras/xmlserializer;1"].createInstance(Ci.nsIDOMSerializer);
             
             // passing serialization to stream       
-            output = serializer.serializeToStream(bookTree, out_stream, 'UTF-8');
+            output = serializer.serializeToStream(bookHTML, out_stream, 'UTF-8');
             // create the stream from which original channel listener will get what we gave it
             var in_stream = storage.newInputStream(0);
 
+/* try{
             // write title to the history
             if (this.title) {
                 history = Cc["@mozilla.org/browser/nav-history-service;1"].getService(Ci.nsIGlobalHistory2);
@@ -282,7 +291,8 @@ FB_Reader.prototype = {
                 }
                 history.setPageTitle(uri, this.title);
             }
-
+}catch(e) {dumpln(e)}
+*/
             // Pass the data to the main content listener
             this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
             this.listener.onStopRequest(request, context, statusCode);

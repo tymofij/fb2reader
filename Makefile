@@ -7,7 +7,7 @@ PROFILE_DIRECTORY="/home/tim/.mozilla/firefox/dev"
 INSTALL_DIRECTORY="$(PROFILE_DIRECTORY)/extensions/fb2reader@clear.com.ua"
 
 XPI_FILE="fb2reader.xpi"
-VERSION="0.14"
+VERSION="0.15"
 
 update: versionize_rdf $(DESTINATIONS)
 	rm -Rf $(INSTALL_DIRECTORY)/*
@@ -23,7 +23,7 @@ run: update
 	~/bin/firefox-3.6/firefox -P dev -no-remote
 
 versionize_rdf:
-	sed -e "s/&VERSION/$(VERSION)/" \
+	sed -e "s/<em:version>.*<\/em:version>/<em:version>$(VERSION)<\/em:version>/" \
 	    src/install.rdf > tmp
 	cat tmp > src/install.rdf
 	rm tmp
