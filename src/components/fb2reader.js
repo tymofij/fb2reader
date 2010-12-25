@@ -174,7 +174,7 @@ FB_Reader.prototype = {
                             getService(Ci.nsIProperties).get("TmpD", Ci.nsIFile);
                     file.append("fictionbook.zip");
                     file.createUnique(Ci.nsIFile.NORMAL_FILE_TYPE, 0666);
-                    // a stream for pushing content into thefile        
+                    // a stream for pushing content into the file        
                     var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"]
                                     .createInstance(Ci.nsIFileOutputStream);
                     stream.init(file, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
@@ -280,19 +280,6 @@ FB_Reader.prototype = {
             // create the stream from which original channel listener will get what we gave it
             var in_stream = storage.newInputStream(0);
 
-/* try{
-            // write title to the history
-            if (this.title) {
-                history = Cc["@mozilla.org/browser/nav-history-service;1"].getService(Ci.nsIGlobalHistory2);
-                history.QueryInterface(Ci.nsIGlobalHistory2);
-                var uri = request.QueryInterface(Ci.nsIChannel).URI; 
-                if (!history.isVisited(uri)) {
-                    history.addURI(uri, false, true, null);
-                }
-                history.setPageTitle(uri, this.title);
-            }
-}catch(e) {dumpln(e)}
-*/
             // Pass the data to the main content listener
             this.listener.onDataAvailable(this.channel, context, in_stream, 0, storage.length);
             this.listener.onStopRequest(request, context, statusCode);

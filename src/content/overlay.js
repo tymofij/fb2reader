@@ -128,20 +128,23 @@ var fb2 = {
             for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
                 var link = extlinks.snapshotItem(i)
                 var href = link.getAttributeNS(XLink_NS, 'href')
-                xlink= doc.createElementNS(xHTML_NS, 'a')
+                var xlink= doc.createElementNS(xHTML_NS, 'a')
                 xlink.href = href
                 link.parentNode.insertBefore(xlink, link)
                 // move contents
                 while(link.firstChild)
                     xlink.appendChild(link.firstChild)
                 if (href.slice(0,1) == '#') { 
+                    // not actually needed if onhashchange is available
+                    if (!("onhashchange" in doc.defaultView)) {
                         xlink.addEventListener("click", fb2.internal_link, true)
+                    }
                 } else {
                     xlink.target = "_blank"
                 }
             }
             
-            // will scroll when back-forward clicked, Gecko 1.9.2 only
+            // will scroll when url changes (back-forward too), Gecko 1.9.2 only
             if ("onhashchange" in doc.defaultView)
                 doc.defaultView.addEventListener("hashchange", fb2.url_change, true)
         }
