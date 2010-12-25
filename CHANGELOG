@@ -1,6 +1,6 @@
 0.15, 2010-12-25
-    * Final solution to favicon and title storing
-    * Added large icons for Firefox 4
+    * Much better storing of favicon/title in history and bookmarks
+    * Added large icons for Firefox 4 and Seamonkey 2.1
 
 0.13, 2010-12-22
     * A bit nicer display of short tooltips

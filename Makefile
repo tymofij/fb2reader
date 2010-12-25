@@ -37,11 +37,11 @@ xpi: versionize_rdf
 prep: xpi
 	sed -e "s/VERSION/$(VERSION)/" \
 	    -e "s/SHA1SUM/`sha1sum $(XPI_FILE) | awk '{print $$1}'`/" \
-	    updates/update.rdf > updates.rdf
+	    updates/update.rdf > update.rdf
 
 release: 
 	# make prep and sign updates.rdf with mccoy 
 	sed -e "s/VERSION/$(VERSION)/" \
 	    -e "s/DATE/`date +%F`/" updates/changes.xhtml > changes.xhtml
 	scp fb2reader.xpi update.rdf changes.xhtml tim@clear.com.ua:~/public_html.firefox/xpi/
-	rm changes.xhtml updates.rdf
+	rm changes.xhtml update.rdf
