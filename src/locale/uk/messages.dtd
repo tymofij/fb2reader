@@ -19,3 +19,5 @@
 <!ENTITY preferences.enabled "Увімкнути читання книг">
 <!ENTITY preferences.paragraphs "Абзаци">
 
+<!ENTITY togglebutton.toggle "Перемкнути">
+

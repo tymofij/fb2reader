@@ -31,13 +31,44 @@ var fb2 = {
         return elem.getAttributeNS(XLink_NS, 'href').slice(1)
     },
 
-//-------------------------------------
+//----------------------- INIT  -------------------------------
+
+    syncToggle: function(){
+        document.getElementById('fb2reader-toggle').setAttribute(
+                'state', fb2.prefs.getBoolPref("enabled") ? 1:0 ); 
+    },
+
+	prefObserver : {
+		observe: function(subject, topic, data) {
+			if(data == "extensions.fb2reader.enabled")
+			    fb2.syncToggle();
+    	},
+
+		QueryInterface : function (aIID) {
+			if (aIID.equals(Components.interfaces.nsIObserver) || 
+				aIID.equals(Components.interfaces.nsISupports) ||
+				aIID.equals(Components.interfaces.nsISupportsWeakReference))
+				return this;
+			throw Components.results.NS_NOINTERFACE;
+		}
+	},
 
     init: function() {
         var appcontent = document.getElementById("appcontent") // browser
-        if(appcontent)
-            appcontent.addEventListener("DOMContentLoaded", fb2.onPageLoad, true)
+        var iPrefs = Components.classes["@mozilla.org/preferences-service;1"]
+                    .getService(Components.interfaces.nsIPrefService)
+        this.prefs = iPrefs.getBranch("extensions.fb2reader.")
+
+		var pbi = iPrefs.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+		pbi.addObserver("extensions.fb2reader.", fb2.prefObserver, true);
+        
+        if (appcontent)
+            appcontent.addEventListener("DOMContentLoaded", fb2.onPageLoad, true);
+            
+        fb2.syncToggle();
     },
+
+//------------------------------    WORKHORSES  ---------------------
 
     internal_link: function(event) {
         fb2.scrollToHref(event.target.ownerDocument, event.target.href)
@@ -89,16 +120,12 @@ var fb2 = {
         var doc = event.originalTarget
         // execute for FictionBook only
 
-        var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-                    .getService(Components.interfaces.nsIPrefService)
-        prefs = prefs.getBranch("extensions.fb2reader.")
-
         if( doc.location.href.match(FB2_REGEX) && 
             doc.getElementsByTagName("FictionBook").length != 0 &&
-            prefs.getBoolPref("enabled") ) {
+            fb2.prefs.getBoolPref("enabled") ) {
 
             // set booky paragraphs
-            if (prefs.getBoolPref("booky_p") ) {
+            if (fb2.prefs.getBoolPref("booky_p") ) {
                 doc.getElementsByTagName("FictionBook")[0].setAttribute('class', 'booky_p')
             }
             

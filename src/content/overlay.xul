@@ -1,4 +1,19 @@
 <?xml version="1.0"?>
+<?xml-stylesheet href="chrome://fb2reader/skin/chrome.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://fb2reader/locale/messages.dtd">
 <overlay id="fb2Overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <script type="application/x-javascript" src="chrome://fb2reader/content/overlay.js"></script>
+
+<toolbarpalette id="BrowserToolbarPalette">
+    <toolbarbutton id="fb2reader-toggle"
+      class="toolbarbutton-1 chromeclass-toolbar-additional" 
+      label="FB2"
+      tooltiptext="&togglebutton.toggle;"
+      oncommand='
+        var state = parseInt(this.getAttribute("state")) ? 0:1;
+        fb2.prefs.setBoolPref("enabled", state);
+        this.setAttribute("state", state);
+        ' />
+</toolbarpalette>
+
 </overlay>
