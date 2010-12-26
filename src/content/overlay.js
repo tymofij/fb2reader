@@ -33,9 +33,22 @@ var fb2 = {
 
 //----------------------- INIT  -------------------------------
 
+	getPaletteButton: function() {
+		var toolbox = document.getElementById("navigator-toolbox");
+		if (!toolbox || !("palette" in toolbox) || !toolbox.palette)
+			return null;
+
+		for (var child = toolbox.palette.firstChild; child; child = child.nextSibling)
+			if (child.id == "fb2reader-toggle")
+				return child;
+
+		return null;
+	},
+
     syncToggle: function(){
-        document.getElementById('fb2reader-toggle').setAttribute(
-                'state', fb2.prefs.getBoolPref("enabled") ? 1:0 ); 
+        var button = fb2.getPaletteButton() || document.getElementById("fb2reader-toggle");
+        if (button)
+            button.setAttribute('state', fb2.prefs.getBoolPref("enabled") ? 1:0 );
     },
 
 	prefObserver : {

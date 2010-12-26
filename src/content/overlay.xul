@@ -10,9 +10,8 @@
       label="FB2"
       tooltiptext="&togglebutton.toggle;"
       oncommand='
-        var state = parseInt(this.getAttribute("state")) ? 0:1;
-        fb2.prefs.setBoolPref("enabled", state);
-        this.setAttribute("state", state);
+        fb2.prefs.setBoolPref("enabled", !fb2.prefs.getBoolPref("enabled"));
+        fb2.syncToggle();
         ' />
 </toolbarpalette>
 
