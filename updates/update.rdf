@@ -10,16 +10,25 @@
         <RDF:li>
           <RDF:Description>
             <em:version>VERSION</em:version> <!-- This is the version number of the add-on -->
-            <!-- One targetApplication for each application the add-on is compatible with -->
+            <!-- Firefox -->
             <em:targetApplication>
               <RDF:Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                 <em:minVersion>3.0</em:minVersion>
                 <em:maxVersion>4.0.*</em:maxVersion>
-                <!-- This is where this version of the add-on will be downloaded from -->
                 <em:updateLink>http://firefox.org.ua/xpi/fb2reader.xpi</em:updateLink>
                 <em:updateHash>sha1:SHA1SUM</em:updateHash>
-                <!-- A page describing what is new in this updated version -->
+                <em:updateInfoURL>http://www.firefox.org.ua/xpi/changes.xhtml</em:updateInfoURL>
+              </RDF:Description>
+            </em:targetApplication>
+            <!-- Seamonkey -->
+            <em:targetApplication>
+              <RDF:Description>
+                <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+                <em:minVersion>2.0</em:minVersion>
+                <em:maxVersion>2.1.*</em:maxVersion>
+                <em:updateLink>http://firefox.org.ua/xpi/fb2reader.xpi</em:updateLink>
+                <em:updateHash>sha1:SHA1SUM</em:updateHash>
                 <em:updateInfoURL>http://www.firefox.org.ua/xpi/changes.xhtml</em:updateInfoURL>
               </RDF:Description>
             </em:targetApplication>
