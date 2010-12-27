@@ -1,5 +1,4 @@
 @namespace "http://www.gribuser.ru/xml/fictionbook/2.0";
-@namespace html "http://www.w3.org/1999/xhtml";
 
 FictionBook {
     display: block;
@@ -7,8 +6,6 @@ FictionBook {
     max-width: 50em;
     margin: 0 auto;
     }
-
-html|img {display: block; margin: 0 auto;}
 
 /* hide metadata */
 description title-info > *, document-info, src-title-info, publish-info, custom-info, binary {display: none; }
@@ -91,7 +88,7 @@ a[type='note'] {
         max-width: 20em;
         max-height:20em;
         overflow-y: auto;
-        -moz-box-shadow: 3px 3px 5px silver;
+        -moz-box-shadow: 2px 2px 3px silver;
         }
         a[type='note'] section p {
             margin: 0.1em 0.3em;

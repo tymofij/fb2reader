@@ -3,7 +3,7 @@ window.addEventListener("load", function() { fb2.init(); }, false)
 const FB2_NS   = 'http://www.gribuser.ru/xml/fictionbook/2.0'
 const FB2_REGEX = /\.fb2(.zip)?(#.*)?$/g
 const XLink_NS = 'http://www.w3.org/1999/xlink'
-const xHTML_NS = 'http://www.w3.org/1999/xhtml'
+const HTML_NS = 'http://www.w3.org/1999/xhtml'
 
 const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
 
@@ -12,7 +12,7 @@ var fb2 = {
 // Utility functions:
     // see https://developer.mozilla.org/en/Xml/id
     // and http://bit.ly/24gZUo for a reason why it is needed
-    getElements : function (doc, query, resultType, prefix) {
+    getElements : function (doc, query, resultType) {
         if (resultType == null)
             resultType = XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE
         
@@ -93,6 +93,7 @@ var fb2 = {
     },
 
     scrollToHref: function(doc, href) {
+        
         var elem = fb2.getSingleElement(doc, "*[@id='"+href.slice(href.indexOf("#")+1)+"']")
         var pos = elem.getBoundingClientRect()
         var win = doc.defaultView
@@ -128,66 +129,117 @@ var fb2 = {
     },
 
     onPageLoad: function(event) {
+    
         // that is the document that triggered event
-
         var doc = event.originalTarget
+
         // execute for FictionBook only
+        if( !doc.location.href.match(FB2_REGEX) || 
+            doc.getElementsByTagName("FictionBook").length == 0 ||
+            !fb2.prefs.getBoolPref("enabled") )
+            return
 
-        if( doc.location.href.match(FB2_REGEX) && 
-            doc.getElementsByTagName("FictionBook").length != 0 &&
-            fb2.prefs.getBoolPref("enabled") ) {
+        // set booky paragraphs
+        if (fb2.prefs.getBoolPref("booky_p") ) {
+            doc.getElementsByTagName("FictionBook")[0].setAttribute('class', 'booky_p')
+        }
+        
+        // for each fb2 image we will create xHTML one        
+        var images = fb2.getElements(doc, "image")
+        for ( var i=0 ; i < images.snapshotLength; i++ ) {
+            try { // ignore malformed images
+                var img = images.snapshotItem(i)
+                // we get corresponding binary node
+                var bin = fb2.getSingleElement(doc, "binary[@id='"+fb2.getHrefVal(img)+"']")
+                // create xhtml image and set src to its base64 data
+                var ximg = doc.createElementNS(HTML_NS, 'img')
+                ximg.src='data:'+bin.getAttribute('content-type')+';base64,'+bin.textContent
+                img.parentNode.insertBefore(ximg, img)
+            } catch(e) {}
+        }
 
-            // set booky paragraphs
-            if (fb2.prefs.getBoolPref("booky_p") ) {
-                doc.getElementsByTagName("FictionBook")[0].setAttribute('class', 'booky_p')
-            }
-            
-            // for each fb2 image we will create xHTML one        
-            var images = fb2.getElements(doc, "image")
-            for ( var i=0 ; i < images.snapshotLength; i++ ) {
-                try { // ignore malformed images
-                    var img = images.snapshotItem(i)
-                    // we get corresponding binary node
-                    var bin = fb2.getSingleElement(doc, "binary[@id='"+fb2.getHrefVal(img)+"']")
-                    // create xhtml image and set src to its base64 data
-                    var ximg = doc.createElementNS(xHTML_NS, 'img')
-                    ximg.src='data:'+bin.getAttribute('content-type')+';base64,'+bin.textContent
-                    img.parentNode.insertBefore(ximg, img)
-                } catch(e) {}
-            }
+        // add listener to all footnote links
+        var notelinks = fb2.getElements(doc, "a[@type='note']")
+        for ( var i=0 ; i < notelinks.snapshotLength; i++ ) {
+            var note = notelinks.snapshotItem(i)
+            note.addEventListener("mouseover", fb2.tooltip, true)
+        }
 
-            // add listener to all footnote links
-            var notelinks = fb2.getElements(doc, "a[@type='note']")
-            for ( var i=0 ; i < notelinks.snapshotLength; i++ ) {
-                var note = notelinks.snapshotItem(i)
-                note.addEventListener("mouseover", fb2.tooltip, true)
-            }
-
-            // replace external links with xHTML ones, add handler to internal ones
-            var extlinks = fb2.getElements(doc, "a[@type!='note' or not(@type)]")
-            for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
-                var link = extlinks.snapshotItem(i)
-                var href = link.getAttributeNS(XLink_NS, 'href')
-                var xlink= doc.createElementNS(xHTML_NS, 'a')
-                xlink.href = href
-                link.parentNode.insertBefore(xlink, link)
-                // move contents
-                while(link.firstChild)
-                    xlink.appendChild(link.firstChild)
-                if (href.slice(0,1) == '#') { 
-                    // not actually needed if onhashchange is available
-                    if (!("onhashchange" in doc.defaultView)) {
-                        xlink.addEventListener("click", fb2.internal_link, true)
+        var body = fb2.getSingleElement(doc, "body[@name!='notes' or not(@name)]")
+        var div = doc.getElementById('contents')
+        var ul = doc.createElementNS(HTML_NS, 'ul');
+        div.appendChild(ul)
+        
+        var autotitle = 0;
+        var walk_sections = function(start, ul) {
+            var sections = doc.evaluate("./fb2:section", start, 
+                    function(){return FB2_NS},
+                    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
+                    );
+            for ( var i=0 ; i < sections.snapshotLength; i++ ) {
+                var section = sections.snapshotItem(i)
+                var title = doc.evaluate("./fb2:title", section, 
+                        function(){return FB2_NS},
+                        XPathResult.FIRST_ORDERED_NODE_TYPE, null
+                        ).singleNodeValue;
+                if (title) {
+                    var title_copy = title.cloneNode(true)
+                    // cleanse ids of copied intitle elements
+                    var kids = doc.evaluate("//fb2:*", title_copy, 
+                            function(){return FB2_NS},
+                            XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
+                            );                    
+                    for(var j=0; j<kids.snapshotLength; j++ )
+                        kids.snapshotItem(j).setAttribute("id", "")
+                  
+                    var a = doc.createElementNS(HTML_NS, 'a')
+                    a.appendChild(title_copy)
+                    if (!title.getAttribute("id")) {
+                        var title_id = "zz_"+autotitle++;
+                        title.setAttribute("id", title_id)
                     }
-                } else {
-                    xlink.target = "_blank"
+                    a.href= "#"+title.getAttribute("id")
+                    var li = doc.createElementNS(HTML_NS, 'li')                    
+                    li.appendChild(a)
+                    ul.appendChild(li)
+                    var sub_ul = doc.createElementNS(HTML_NS, 'ul')
+                    li.appendChild(sub_ul)
+                    walk_sections(section, sub_ul)
                 }
             }
-            
-            // will scroll when url changes (back-forward too), Gecko 1.9.2 only
-            if ("onhashchange" in doc.defaultView)
-                doc.defaultView.addEventListener("hashchange", fb2.url_change, true)
         }
-    }
+        
+        if (body)
+            walk_sections(body, ul)
+            
+        if (!ul.hasChildNodes()){
+            div.parentNode.removeChild(div)
+        }
+        
+        // replace external links with xHTML ones, add handler to internal ones
+        var extlinks = fb2.getElements(doc, "a[@type!='note' or not(@type)]")
+        for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
+            var link = extlinks.snapshotItem(i)
+            var href = link.getAttributeNS(XLink_NS, 'href')
+            var xlink= doc.createElementNS(HTML_NS, 'a')
+            xlink.href = href
+            link.parentNode.insertBefore(xlink, link)
+            // move contents
+            while(link.firstChild)
+                xlink.appendChild(link.firstChild)
+            if (href.slice(0,1) == '#') { 
+                // not actually needed if onhashchange is available
+                if (!("onhashchange" in doc.defaultView)) {
+                    xlink.addEventListener("click", fb2.internal_link, true)
+                }
+            } else {
+                xlink.target = "_blank"
+            }
+        }
+        // will scroll when url changes (back-forward too), Gecko 1.9.2 only
+        if ("onhashchange" in doc.defaultView)
+            doc.defaultView.addEventListener("hashchange", fb2.url_change, true)        
+        
+    } // onPageLoad end
 }
 
