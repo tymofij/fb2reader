@@ -83,23 +83,6 @@ var fb2 = {
 
 //------------------------------    WORKHORSES  ---------------------
 
-    internal_link: function(event) {
-        fb2.scrollToHref(event.target.ownerDocument, event.target.href)
-    },
-
-    url_change: function(event) {
-        // even.target is window here
-        fb2.scrollToHref(event.target.document, event.target.location.toString())
-    },
-
-    scrollToHref: function(doc, href) {
-        
-        var elem = fb2.getSingleElement(doc, "*[@id='"+href.slice(href.indexOf("#")+1)+"']")
-        var pos = elem.getBoundingClientRect()
-        var win = doc.defaultView
-        win.scroll(win.scrollX+pos.left, win.scrollY+pos.top)
-    },
-
     tooltip: function(event) {
         var a = event.target
         var doc = event.target.ownerDocument
@@ -184,6 +167,7 @@ var fb2 = {
                         ).singleNodeValue;
                 if (title) {
                     var title_copy = title.cloneNode(true)
+
                     // cleanse ids of copied intitle elements
                     var kids = doc.evaluate("//fb2:*", title_copy, 
                             function(){return FB2_NS},
@@ -191,14 +175,16 @@ var fb2 = {
                             );                    
                     for(var j=0; j<kids.snapshotLength; j++ )
                         kids.snapshotItem(j).setAttribute("id", "")
-                  
+
                     var a = doc.createElementNS(HTML_NS, 'a')
                     a.appendChild(title_copy)
-                    if (!title.getAttribute("id")) {
-                        var title_id = "zz_"+autotitle++;
-                        title.setAttribute("id", title_id)
-                    }
-                    a.href= "#"+title.getAttribute("id")
+
+                    // for usual local href navigation, no hacks                    
+                    var span = doc.createElementNS(HTML_NS, 'span')
+                    span.id = "zz_"+autotitle++;
+                    title.insertBefore(span, title.firstChild)
+                    a.href= "#"+span.id;
+                    
                     var li = doc.createElementNS(HTML_NS, 'li')                    
                     li.appendChild(a)
                     ul.appendChild(li)
@@ -211,12 +197,13 @@ var fb2 = {
         
         if (body)
             walk_sections(body, ul)
-            
+
+        // documents without proper sectioning are not that unusual
         if (!ul.hasChildNodes()){
             div.parentNode.removeChild(div)
         }
         
-        // replace external links with xHTML ones, add handler to internal ones
+        // replace FB2 links with xHTML ones
         var extlinks = fb2.getElements(doc, "a[@type!='note' or not(@type)]")
         for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
             var link = extlinks.snapshotItem(i)
@@ -227,19 +214,21 @@ var fb2 = {
             // move contents
             while(link.firstChild)
                 xlink.appendChild(link.firstChild)
+            
+            // for local links to FB2 elements we will create HTML anchors    
             if (href.slice(0,1) == '#') { 
-                // not actually needed if onhashchange is available
-                if (!("onhashchange" in doc.defaultView)) {
-                    xlink.addEventListener("click", fb2.internal_link, true)
+                var id = href.slice(href.indexOf("#")+1)
+                var elem = fb2.getSingleElement(doc, "*[@id='"+id+"']")
+                if (elem) {
+                    elem.setAttribute("id", "")
+                    var span = doc.createElementNS(HTML_NS, 'span')
+                    span.id = id
+                    elem.parentNode.insertBefore(span, elem)
                 }
             } else {
                 xlink.target = "_blank"
             }
         }
-        // will scroll when url changes (back-forward too), Gecko 1.9.2 only
-        if ("onhashchange" in doc.defaultView)
-            doc.defaultView.addEventListener("hashchange", fb2.url_change, true)        
-        
     } // onPageLoad end
 }
 
