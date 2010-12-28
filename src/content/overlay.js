@@ -15,9 +15,9 @@ var fb2 = {
     getElements : function (doc, query, resultType) {
         if (resultType == null)
             resultType = XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE
-        
+
         // could use: namespace-uri()='"+FB2_NS+"' and ..
-        return doc.evaluate("//fb2:"+query, doc.documentElement, 
+        return doc.evaluate("//fb2:"+query, doc.documentElement,
                     function(){return FB2_NS},
                     resultType, null
                     );
@@ -58,7 +58,7 @@ var fb2 = {
     	},
 
 		QueryInterface : function (aIID) {
-			if (aIID.equals(Components.interfaces.nsIObserver) || 
+			if (aIID.equals(Components.interfaces.nsIObserver) ||
 				aIID.equals(Components.interfaces.nsISupports) ||
 				aIID.equals(Components.interfaces.nsISupportsWeakReference))
 				return this;
@@ -74,10 +74,10 @@ var fb2 = {
 
 		var pbi = iPrefs.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
 		pbi.addObserver("extensions.fb2reader.", fb2.prefObserver, true);
-        
+
         if (appcontent)
             appcontent.addEventListener("DOMContentLoaded", fb2.onPageLoad, true);
-            
+
         fb2.syncToggle();
     },
 
@@ -95,7 +95,7 @@ var fb2 = {
                 var note = a.firstChild
                 while (note.nodeName != 'section')
                     note = note.nextSibling
-            } 
+            }
 
             // alters the note box's position_h to keep it on screen
             if ( note.getBoundingClientRect().right > window.innerWidth - SCROLLBAR)
@@ -112,12 +112,12 @@ var fb2 = {
     },
 
     onPageLoad: function(event) {
-    
+
         // that is the document that triggered event
         var doc = event.originalTarget
 
         // execute for FictionBook only
-        if( !doc.location.href.match(FB2_REGEX) || 
+        if( !doc.location.href.match(FB2_REGEX) ||
             doc.getElementsByTagName("FictionBook").length == 0 ||
             !fb2.prefs.getBoolPref("enabled") )
             return
@@ -126,8 +126,8 @@ var fb2 = {
         if (fb2.prefs.getBoolPref("booky_p") ) {
             doc.getElementsByTagName("FictionBook")[0].setAttribute('class', 'booky_p')
         }
-        
-        // for each fb2 image we will create xHTML one        
+
+        // for each fb2 image we will create xHTML one
         var images = fb2.getElements(doc, "image")
         for ( var i=0 ; i < images.snapshotLength; i++ ) {
             try { // ignore malformed images
@@ -152,16 +152,16 @@ var fb2 = {
         var div = doc.getElementById('contents')
         var ul = doc.createElementNS(HTML_NS, 'ul');
         div.appendChild(ul)
-        
-        var autotitle = 0;
+
+        var title_counter = 1;
         var walk_sections = function(start, ul) {
-            var sections = doc.evaluate("./fb2:section", start, 
+            var sections = doc.evaluate("./fb2:section", start,
                     function(){return FB2_NS},
                     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
                     );
             for ( var i=0 ; i < sections.snapshotLength; i++ ) {
                 var section = sections.snapshotItem(i)
-                var title = doc.evaluate("./fb2:title", section, 
+                var title = doc.evaluate("./fb2:title", section,
                         function(){return FB2_NS},
                         XPathResult.FIRST_ORDERED_NODE_TYPE, null
                         ).singleNodeValue;
@@ -169,23 +169,23 @@ var fb2 = {
                     var title_copy = title.cloneNode(true)
 
                     // cleanse ids of copied intitle elements
-                    var kids = doc.evaluate("//fb2:*", title_copy, 
+                    var kids = doc.evaluate("//fb2:*", title_copy,
                             function(){return FB2_NS},
                             XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
-                            );                    
+                            );
                     for(var j=0; j<kids.snapshotLength; j++ )
                         kids.snapshotItem(j).setAttribute("id", "")
 
                     var a = doc.createElementNS(HTML_NS, 'a')
                     a.appendChild(title_copy)
 
-                    // for usual local href navigation, no hacks                    
+                    // for usual local href navigation, no hacks
                     var span = doc.createElementNS(HTML_NS, 'span')
-                    span.id = "zz_"+autotitle++;
+                    span.id = "zz_" + title_counter++;
                     title.insertBefore(span, title.firstChild)
                     a.href= "#"+span.id;
-                    
-                    var li = doc.createElementNS(HTML_NS, 'li')                    
+
+                    var li = doc.createElementNS(HTML_NS, 'li')
                     li.appendChild(a)
                     ul.appendChild(li)
                     var sub_ul = doc.createElementNS(HTML_NS, 'ul')
@@ -194,7 +194,7 @@ var fb2 = {
                 }
             }
         }
-        
+
         if (body)
             walk_sections(body, ul)
 
@@ -202,7 +202,7 @@ var fb2 = {
         if (!ul.hasChildNodes()){
             div.parentNode.removeChild(div)
         }
-        
+
         // replace FB2 links with xHTML ones
         var extlinks = fb2.getElements(doc, "a[@type!='note' or not(@type)]")
         for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
@@ -214,9 +214,9 @@ var fb2 = {
             // move contents
             while(link.firstChild)
                 xlink.appendChild(link.firstChild)
-            
-            // for local links to FB2 elements we will create HTML anchors    
-            if (href.slice(0,1) == '#') { 
+
+            // for local links to FB2 elements we will create HTML anchors
+            if (href.slice(0,1) == '#') {
                 var id = href.slice(href.indexOf("#")+1)
                 var elem = fb2.getSingleElement(doc, "*[@id='"+id+"']")
                 if (elem) {
@@ -231,4 +231,3 @@ var fb2 = {
         }
     } // onPageLoad end
 }
-

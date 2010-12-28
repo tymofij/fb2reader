@@ -1,5 +1,11 @@
+0.19, 2010-12-28
+    * Printing and print preview
+
+0.18, 2010-12-28
+    * Link navigation works much better
+
 0.17, 2010-12-27
-    * Added file index
+    * Added book index
 
 0.16, 2010-12-26
     * Added toolbar toggle button
@@ -55,7 +61,7 @@
     * Displays images
     * Shows notes
 
-0.2 
+0.2
     * Added FB2 favicon on tabs
     * Book title is shown on tab
 
