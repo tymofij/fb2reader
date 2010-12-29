@@ -1,7 +1,7 @@
 window.addEventListener("load", function() { fb2.init(); }, false)
 
 const FB2_NS   = 'http://www.gribuser.ru/xml/fictionbook/2.0'
-const FB2_REGEX = /\.fb2(.zip)?(#.*)?$/g
+const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/g
 const XLink_NS = 'http://www.w3.org/1999/xlink'
 const HTML_NS = 'http://www.w3.org/1999/xhtml'
 
@@ -34,6 +34,9 @@ var fb2 = {
 //----------------------- INIT  -------------------------------
 
 	getPaletteButton: function() {
+        // For some weird reason document.getElementById("fb2reader-toggle")
+        // works only when the button is visible
+        // this here works for cases when if it is not
 		var toolbox = document.getElementById("navigator-toolbox");
 		if (!toolbox || !("palette" in toolbox) || !toolbox.palette)
 			return null;
@@ -148,6 +151,7 @@ var fb2 = {
             note.addEventListener("mouseover", fb2.tooltip, true)
         }
 
+        // build index
         var body = fb2.getSingleElement(doc, "body[@name!='notes' or not(@name)]")
         var div = doc.getElementById('contents')
         var ul = doc.createElementNS(HTML_NS, 'ul');

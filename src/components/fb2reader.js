@@ -24,7 +24,10 @@ function dumpln(s){
 }
 
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
-const FB2_REGEX = /\.fb2(.zip)?(#.*)?[\'\"]?$/g
+
+// End quotes are needed to enable matching of header lines like
+// Content-Disposition: attachment; filename="foo.fb2"
+const FB2_REGEX = /\.fb2(\.zip)?(#.*)?[\'\"]?$/g
 
 const NS_ERROR_NOT_AVAILABLE  = Components.results.NS_ERROR_NOT_AVAILABLE;
 
