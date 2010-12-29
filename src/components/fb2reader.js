@@ -27,6 +27,8 @@ const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
 
 // End quotes are needed to enable matching of header lines like
 // Content-Disposition: attachment; filename="foo.fb2"
+// TODO: matching of Content-Disposition: attachment; filename=foo.html ;
+// see http://greenbytes.de/tech/tc2231/#attwithasciifilenamenqs
 const FB2_REGEX = /\.fb2(\.zip)?(#.*)?[\'\"]?$/g
 
 const NS_ERROR_NOT_AVAILABLE  = Components.results.NS_ERROR_NOT_AVAILABLE;
