@@ -31,7 +31,9 @@ empty-line {margin: 1em 0;}
 body > title {font-size: x-large; }
 title {font-size: large;}
     title p {margin: 0.3em 0;}
-title, title p, subtitle {text-align: center; text-indent: 0;}
+title, title p, subtitle {
+    text-align: center; text-indent: 0;
+    }
 
 subtitle {font-weight:bold;}
 
@@ -41,13 +43,15 @@ strong {font-weight:bold;}
 strikethrough { text-decoration: line-through; }
 sub {vertical-align: sub;font-size: xx-small;}
 sup {vertical-align: super;font-size: xx-small;}
-code {white-space: pre; font-family: monospace;} 
+code {white-space: pre; font-family: monospace;}
 
 /* citations and epigraphs */
 cite {border-left: 5px solid silver; background: #eee; padding: 0.4em 1em;}
 cite > p:first-child, cite > p:last-child {margin: 0;}
-epigraph {margin-left: 60%;}
-text-author {margin-left: 5em;}
+
+text-author {margin-left: 5em; font-style: italic;}
+epigraph {margin-left: 50%;}
+epigraph text-author {margin-left: 0;}
 
 /* poems */
 poem {margin-left: 10%}
@@ -61,9 +65,15 @@ table {display: table; border-collapse: collapse; margin: 0 auto;}
         padding: 0.2em 0.5em;
         border: 1px solid silver;
         }
+    th { font-weight: bold; }
+
     td[align="left"], th[align="left"] {text-align: left;}
     td[align="right"], th[align="right"] {text-align: right;}
     td[align="center"], th[align="center"] {text-align: center;}
+
+    td[valign="top"],  th[valign="top"] {vertical-align: top;}
+    td[valign="middle"], th[valign="middle"] {vertical-align: middle;}
+    td[valign="bottom"], th[valign="bottom"] {vertical-align: bottom;}
 
 /* notes */
 body[name="notes"] {display:none;}
