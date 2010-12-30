@@ -47,6 +47,15 @@ var fb2 = {
             doc.documentElement,null).getPropertyValue("height").slice(0, -2)
     },
 
+    savePosition: function(event) {
+            var doc = event.target
+            var window = doc.defaultView
+            var height = fb2.getDocHeight(doc)
+
+            var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
+            positions[fb2.getDocId(doc)] = window.pageYOffset / height
+            fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
+    },
 
 //----------------------- INIT  -------------------------------
 
@@ -262,15 +271,7 @@ var fb2 = {
         }
 
         // handler to save reading position on each scroll
-        doc.defaultView.addEventListener("scroll", function(event) {
-            var doc = event.target
-            var window = doc.defaultView
-            var height = fb2.getDocHeight(doc)
-
-            var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
-            positions[fb2.getDocId(doc)] = window.pageYOffset / height
-            fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
-            }, false)
+        doc.defaultView.addEventListener("scroll", fb2.savePosition, false)
 
     } // onPageLoad end
 }
