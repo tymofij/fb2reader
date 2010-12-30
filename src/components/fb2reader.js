@@ -22,16 +22,20 @@ const Cc = Components.classes;
 function dumpln(s){
   dump("FB2 "+s+"\n");
 }
-
 const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
 
-// End quotes are needed to enable matching of header lines like
-// Content-Disposition: attachment; filename="foo.fb2"
-// TODO: matching of Content-Disposition: attachment; filename=foo.html ;
-// see http://greenbytes.de/tech/tc2231/#attwithasciifilenamenqs
-const FB2_REGEX = /\.fb2(\.zip)?(#.*)?[\'\"]?$/g
+const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/g
 
-const NS_ERROR_NOT_AVAILABLE  = Components.results.NS_ERROR_NOT_AVAILABLE;
+// those guys serve .zip (not .fb2.zip) books from these hosts:
+// http://bookfi-dl100.s3.amazonaws.com
+// http://bookfi-dl102.s3.amazonaws.com
+const BOOKFI_REGEX = /^http:\/\/bookfi-dl10[02]\.s3\.amazonaws\.com\/.*\.zip$/g
+
+// Content-Disposition: attachment; filename="foo.fb2"
+// see http://greenbytes.de/tech/tc2231/#inlwithasciifilename
+const ATTACHMENT_REGEX = /\.fb2(\.zip)?($|[ \'\"])/g
+
+const NS_ERROR_NOT_AVAILABLE = Components.results.NS_ERROR_NOT_AVAILABLE;
 
 /* FB2 reader component */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -82,17 +86,17 @@ FB_Reader.prototype = {
     // nsIContentSniffer::getMIMETypeFromContent
     getMIMETypeFromContent: function(request, data) {
         // sets mime type for .fb2 and fb.* files
-       
+
         var prefs = Cc["@mozilla.org/preferences-service;1"]
                         .getService(Ci.nsIPrefBranch);
- 
+
         if (!prefs.getBoolPref("extensions.fb2reader.enabled"))
             return null
 
         try {
             isFb2 = false
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-            if(uri.match(FB2_REGEX)) {
+            if(uri.match(FB2_REGEX) || uri.match(BOOKFI_REGEX)) {
                 dumpln("URI match on "+uri);
                 isFb2 = true;
             }
@@ -101,7 +105,7 @@ FB_Reader.prototype = {
                 var type = httpChannel.getResponseHeader("Content-Type");
                 try {
                     var disposition = httpChannel.getResponseHeader("Content-Disposition");
-                    if(disposition.match(FB2_REGEX) && !type.match(/application\/fb2/g)) {
+                    if(disposition.match(ATTACHMENT_REGEX) && !type.match(/application\/fb2/g)) {
                         dumpln("type/disposition match on "+uri);
                         httpChannel.setResponseHeader("Content-Disposition", "", false);
                         isFb2 = true;
@@ -118,7 +122,6 @@ FB_Reader.prototype = {
         }
     },
 
-  
     // nsIStreamConverter::convert
     // does nothing, just to comply with interface
     convert: function(fromStream, fromType, toType, ctxt) {
@@ -126,7 +129,7 @@ FB_Reader.prototype = {
     },
 
     // nsIStreamConverter::asyncConvertData
-    // Store the listener passed to us    
+    // Store the listener passed to us
     asyncConvertData: function(fromType, toType, listener, ctxt) {
         this.listener = listener;
     },
@@ -144,7 +147,7 @@ FB_Reader.prototype = {
         // All our data will be coerced to UTF-8
         this.channel.contentCharset = "UTF-8";
 
-        // do not care about Content-Disposition: Attachment        
+        // do not care about Content-Disposition: Attachment
         if(this.channel instanceof Ci.nsIHttpChannel) {
             var chan = request.QueryInterface(Ci.nsIChannel);
             var httpChannel = chan.QueryInterface(Ci.nsIHttpChannel);
@@ -159,10 +162,10 @@ FB_Reader.prototype = {
 		var binaryInputStream = Cc["@mozilla.org/binaryinputstream;1"].createInstance(Ci.nsIBinaryInputStream);
 
 		binaryInputStream.setInputStream(inputStream);
-        this.data += binaryInputStream.readBytes(count);        
-        
+        this.data += binaryInputStream.readBytes(count);
+
     },
- 
+
     // Fired when all the data was successfully read
     // nsIRequestObserver::onStopRequest
     onStopRequest: function(request, context, statusCode) {
@@ -179,7 +182,7 @@ FB_Reader.prototype = {
                             getService(Ci.nsIProperties).get("TmpD", Ci.nsIFile);
                     file.append("fictionbook.zip");
                     file.createUnique(Ci.nsIFile.NORMAL_FILE_TYPE, 0666);
-                    // a stream for pushing content into the file        
+                    // a stream for pushing content into the file
                     var stream = Cc["@mozilla.org/network/safe-file-output-stream;1"]
                                     .createInstance(Ci.nsIFileOutputStream);
                     stream.init(file, 0x04 | 0x08 | 0x20, 0600, 0); // write, create, truncate
@@ -202,19 +205,19 @@ FB_Reader.prototype = {
                                     .createInstance(Ci.nsIScriptableInputStream);
                     s2.init(fb2_stream);
                     this.data = s2.read(s2.available());
-                } catch (e) { 
+                } catch (e) {
                     dumpln(e)
-                    throw "error_zip" 
+                    throw "error_zip"
                 }
             }
-            
+
             try {
                 // Try to detect the XML encoding if declared in the file
                 if (this.data.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
                      this.charset = RegExp.$1;
                 }
                 dumpln("charset detected: "+this.charset)
-                
+
                 // ok, lets make unicode out of binary
                 var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
                                     .createInstance(Ci.nsIScriptableUnicodeConverter);
@@ -226,7 +229,7 @@ FB_Reader.prototype = {
                                     .createInstance(Ci.nsIDOMParser);
                 var bookTree = parser.parseFromString(this.data, "text/xml")
 
-                // if the parsing process failed, DOMParser currently does not throw an exception, 
+                // if the parsing process failed, DOMParser currently does not throw an exception,
                 // but instead returns an error document (see bug 45566)
                 // let's check it did parse
                 if (bookTree.getElementsByTagName("FictionBook").length == 0) {
@@ -239,15 +242,15 @@ FB_Reader.prototype = {
                 XHR.overrideMimeType("text/xml");
                 XHR.send(null);
                 bookHTML = XHR.responseXML
-                
+
                 // lets find out and set book title for the history
                 title_tags = bookTree.getElementsByTagName("book-title")
                 if (title_tags.length != 0) {
                     this.title = title_tags[0].textContent;
-                    bookHTML.getElementsByTagName('title')[0].textContent = this.title; 
+                    bookHTML.getElementsByTagName('title')[0].textContent = this.title;
                     dumpln("title found: " + this.title)
                 }
-                
+
                 // sweet moment of reunion
                 FbInHTML = bookHTML.adoptNode(bookTree.getElementsByTagName('FictionBook')[0])
                 bookHTML.getElementsByTagName('body')[0].appendChild(FbInHTML)
@@ -279,8 +282,8 @@ FB_Reader.prototype = {
 
             // serialize the tree and put it into the stream
             var serializer = Cc["@mozilla.org/xmlextras/xmlserializer;1"].createInstance(Ci.nsIDOMSerializer);
-            
-            // passing serialization to stream       
+
+            // passing serialization to stream
             output = serializer.serializeToStream(bookHTML, out_stream, 'UTF-8');
             // create the stream from which original channel listener will get what we gave it
             var in_stream = storage.newInputStream(0);
@@ -290,7 +293,6 @@ FB_Reader.prototype = {
             this.listener.onStopRequest(request, context, statusCode);
         }
     },
-
 };
 
 
@@ -298,4 +300,3 @@ if (XPCOMUtils.generateNSGetFactory) // Firefox 4
     var NSGetFactory = XPCOMUtils.generateNSGetFactory([FB_Reader]);
 else // others
     var NSGetModule = XPCOMUtils.generateNSGetModule([FB_Reader]);
-

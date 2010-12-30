@@ -1,9 +1,11 @@
 window.addEventListener("load", function() { fb2.init(); }, false)
 
 const FB2_NS   = 'http://www.gribuser.ru/xml/fictionbook/2.0'
-const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/g
 const XLink_NS = 'http://www.w3.org/1999/xlink'
 const HTML_NS = 'http://www.w3.org/1999/xhtml'
+
+// yes, book.zip is to be tried. If managed to fire 'load' event one can expect anything.
+const FB2_REGEX = /\.(fb2|zip)(#.*)?$/g
 
 const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
 
