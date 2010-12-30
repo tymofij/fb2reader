@@ -33,6 +33,21 @@ var fb2 = {
         return elem.getAttributeNS(XLink_NS, 'href').slice(1)
     },
 
+    getDocId: function(doc){
+        var id = fb2.getSingleElement(doc, "id")
+        if (id)
+            id = id.textContent
+        else
+            id = doc.title
+        return id
+    },
+
+    getDocHeight: function(doc) {
+        return doc.defaultView.getComputedStyle(
+            doc.documentElement,null).getPropertyValue("height").slice(0, -2)
+    },
+
+
 //----------------------- INIT  -------------------------------
 
 	getPaletteButton: function() {
@@ -79,6 +94,9 @@ var fb2 = {
 
 		var pbi = iPrefs.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
 		pbi.addObserver("extensions.fb2reader.", fb2.prefObserver, true);
+
+        this.JSON = Components.classes["@mozilla.org/dom/json;1"]
+                 .createInstance(Components.interfaces.nsIJSON);
 
         if (appcontent)
             appcontent.addEventListener("DOMContentLoaded", fb2.onPageLoad, true);
@@ -235,5 +253,24 @@ var fb2 = {
                 xlink.target = "_blank"
             }
         }
+
+        // try to restore reading position
+        var window = doc.defaultView
+        var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
+        if (readPos){
+            window.scrollTo(0, readPos * fb2.getDocHeight(doc))
+        }
+
+        // handler to save reading position on each scroll
+        doc.defaultView.addEventListener("scroll", function(event) {
+            var doc = event.target
+            var window = doc.defaultView
+            var height = fb2.getDocHeight(doc)
+
+            var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
+            positions[fb2.getDocId(doc)] = window.pageYOffset / height
+            fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
+            }, false)
+
     } // onPageLoad end
 }
