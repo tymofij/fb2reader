@@ -48,23 +48,24 @@ var fb2 = {
     },
 
     savePosition: function(event) {
-            var doc = event.target
-            var window = doc.defaultView
-            var height = fb2.getDocHeight(doc)
+        var doc = event.target
+        var window = doc.defaultView
+        var height = fb2.getDocHeight(doc)
 
-            var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
-            positions[fb2.getDocId(doc)] = window.pageYOffset / height
-            fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
+        var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
+        positions[fb2.getDocId(doc)] = window.pageYOffset / height
+        fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
     },
 
     loadPosition: function(event) {
-            var doc = event.target
-            var window = doc.defaultView
-            var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
-            if (readPos){
-                window.scrollTo(0, readPos * fb2.getDocHeight(doc))
-            }
+        var doc = event.target
+        var window = doc.defaultView
+        var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
+        if (readPos){
+            window.scrollTo(0, readPos * fb2.getDocHeight(doc))
+        }
     },
+
 
 //----------------------- INIT  -------------------------------
 
@@ -272,7 +273,7 @@ var fb2 = {
             }
         }
 
-        // try to restore reading position
+        // schedule restoring reading position
         var window = doc.defaultView
         window.addEventListener("load", fb2.loadPosition , false)
 
