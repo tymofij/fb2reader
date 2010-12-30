@@ -43,8 +43,8 @@ var fb2 = {
     },
 
     getDocHeight: function(doc) {
-        return doc.defaultView.getComputedStyle(
-            doc.documentElement,null).getPropertyValue("height").slice(0, -2)
+        return parseInt(doc.defaultView.getComputedStyle(
+            doc.documentElement,null).getPropertyValue("height").slice(0, -2))
     },
 
     savePosition: function(event) {
@@ -55,6 +55,15 @@ var fb2 = {
             var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
             positions[fb2.getDocId(doc)] = window.pageYOffset / height
             fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
+    },
+
+    loadPosition: function(event) {
+            var doc = event.target
+            var window = doc.defaultView
+            var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
+            if (readPos){
+                window.scrollTo(0, readPos * fb2.getDocHeight(doc))
+            }
     },
 
 //----------------------- INIT  -------------------------------
@@ -265,10 +274,7 @@ var fb2 = {
 
         // try to restore reading position
         var window = doc.defaultView
-        var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
-        if (readPos){
-            window.scrollTo(0, readPos * fb2.getDocHeight(doc))
-        }
+        window.addEventListener("load", fb2.loadPosition , false)
 
         // handler to save reading position on each scroll
         doc.defaultView.addEventListener("scroll", fb2.savePosition, false)
