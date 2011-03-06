@@ -110,20 +110,20 @@ var fb2 = {
         var doc = event.target
         if (!fb2.getDocId(doc))
             return // do not save position for books without ID
-        var window = doc.defaultView
+        var win = doc.defaultView
         var height = fb2.getDocHeight(doc)
 
         var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
-        positions[fb2.getDocId(doc)] = window.pageYOffset / height
+        positions[fb2.getDocId(doc)] = win.pageYOffset / height
         fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
     },
 
     loadPosition: function(event) {
         var doc = event.target
-        var window = doc.defaultView
+        var win = doc.defaultView
         var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
         if (readPos){
-            window.scrollTo(0, readPos * fb2.getDocHeight(doc))
+            win.scrollTo(0, readPos * fb2.getDocHeight(doc))
         }
     },
 
@@ -276,8 +276,8 @@ var fb2 = {
         }
 
         // schedule restoring reading position
-        var window = doc.defaultView
-        window.addEventListener("load", fb2.loadPosition , false)
+        var win = doc.defaultView
+        win.addEventListener("load", fb2.loadPosition , false)
 
         // handler to save reading position on each scroll
         doc.defaultView.addEventListener("scroll", fb2.savePosition, false)
