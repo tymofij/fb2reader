@@ -14,9 +14,6 @@
     <em:optionsURL>chrome://fb2reader/content/options.xul</em:optionsURL>
     <em:homepageURL>http://clear.com.ua/en/projects/firefox/fb2reader</em:homepageURL>
 
-<em:updateURL>http://firefox.org.ua/xpi/update.rdf?addon=fb2reader&amp;v=%ITEM_VERSION%</em:updateURL>
-<em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvo8ymuukJWnlvl1g54GIDxGTLSCXfT6EquebVszdnPrs75OofxCO6E4ResRXxGPHW/H9I00wyR5sHpuvDDQT3vk/JRmXOgXEQ4ttBwWrHKjPTOxJDOC7iHG5qErCCbzxrFgFE7uuGLrBAg0jU6/s5RRNat4/eG/NsK98fIiyVxwIDAQAB</em:updateKey>
-
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
@@ -35,7 +32,7 @@
       </Description>
     </em:targetApplication>
 
-    <!-- Fennec
+    <!-- Fennec https://bugzilla.mozilla.org/show_bug.cgi?id=621406
     <em:targetApplication>
       <Description>
         <em:id>{a23983c0-fd0e-11dc-95ff-0800200c9a66}</em:id>

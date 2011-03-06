@@ -108,6 +108,8 @@ var fb2 = {
 
     savePosition: function(event) {
         var doc = event.target
+        if (!fb2.getDocId(doc))
+            return // do not save position for books without ID
         var window = doc.defaultView
         var height = fb2.getDocHeight(doc)
 
