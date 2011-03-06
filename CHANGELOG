@@ -1,3 +1,10 @@
+0.21, 2011-03-06
+    * use DOM Storage for saving read position
+
+0.20, 2011-03-05
+    * Updates will be served by AMO. They disabled self-hosted addons yet I want to be listed
+    * Reading position is saved per-book
+
 0.19, 2010-12-28
     * Printing and print preview
 

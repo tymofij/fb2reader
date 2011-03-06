@@ -95,9 +95,6 @@ var fb2 = {
 		var pbi = iPrefs.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
 		pbi.addObserver("extensions.fb2reader.", fb2.prefObserver, true);
 
-        this.JSON = Components.classes["@mozilla.org/dom/json;1"]
-                 .createInstance(Components.interfaces.nsIJSON);
-
         if (appcontent)
             appcontent.addEventListener("DOMContentLoaded", fb2.onPageLoad, true);
 
@@ -112,18 +109,15 @@ var fb2 = {
             return // do not save position for books without ID
         var win = doc.defaultView
         var height = fb2.getDocHeight(doc)
-
-        var positions = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))
-        positions[fb2.getDocId(doc)] = win.pageYOffset / height
-        fb2.prefs.setCharPref("positions", fb2.JSON.encode(positions))
+        globalStorage['fb2reader'][fb2.getDocId(doc)] = win.pageYOffset / height
     },
 
     loadPosition: function(event) {
         var doc = event.target
         var win = doc.defaultView
-        var readPos = fb2.JSON.decode(fb2.prefs.getCharPref("positions"))[fb2.getDocId(doc)]
+        var readPos = globalStorage['fb2reader'][fb2.getDocId(doc)]
         if (readPos){
-            win.scrollTo(0, readPos * fb2.getDocHeight(doc))
+            win.scrollTo(0, parseFloat(readPos) * fb2.getDocHeight(doc))
         }
     },
 
