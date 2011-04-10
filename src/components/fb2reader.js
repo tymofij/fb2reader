@@ -197,6 +197,8 @@ FB_Reader.prototype = {
                                     .createInstance(Ci.nsIZipReader);
                     zReader.open(file)
                     // grabbing first fb2 inside
+                    // fails for non-latin filenames
+                    // https://bugzilla.mozilla.org/show_bug.cgi?id=296795
                     var fb2_inside = zReader.findEntries("*.fb2").getNext()
                     var fb2_stream = zReader.getInputStream(fb2_inside)
 
@@ -205,6 +207,9 @@ FB_Reader.prototype = {
                                     .createInstance(Ci.nsIScriptableInputStream);
                     s2.init(fb2_stream);
                     this.data = s2.read(s2.available());
+
+                    // cleanup, non-recursive
+                    file.remove(0)
                 } catch (e) {
                     dumpln(e)
                     throw "error_zip"
