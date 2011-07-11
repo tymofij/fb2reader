@@ -21,7 +21,7 @@ div#contents {
     -moz-box-shadow: 2px 2px 3px silver;
     max-height:90%;
     overflow-y: auto;
-    } 
+    }
     div#contents > div {
         font-family: serif;
         font-size: 2em;
@@ -34,13 +34,14 @@ div#contents {
     }
     div#contents:hover li {
         display: block;
-    }    
+    }
     div#contents li {
         display: none;
         line-height: 95%;
     }
-    
-    
+    /* sometimes images happen to be in titles, hide 'em */
+    div#contents img { display: none }
+
     div#contents fb2|* {
         font-size: small;
         text-align: left;
@@ -49,7 +50,7 @@ div#contents {
     div#contents a {
         color: black;
         text-decoration: none;
-        padding: 0.2em 0.5em 0.2em 1em;    
+        padding: 0.2em 0.5em 0.2em 1em;
         display: block;
     }
     div#contents a:visited { color: black; }
@@ -57,7 +58,7 @@ div#contents {
     div#contents li li a { padding-left: 2em; }
     div#contents li li li a { padding-left: 3em; }
     div#contents li li li li a { padding-left: 4em; }
-    div#contents li li li li li a { padding-left: 5em; }    
+    div#contents li li li li li a { padding-left: 5em; }
     div#contents a:hover {
         background: ivory;
         text-decoration: underline;

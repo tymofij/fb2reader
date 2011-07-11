@@ -96,6 +96,7 @@ a[type='note'] {
         display:none;
         background: #f5f5b5;
         border: 1px solid #baba45;
+        border-radius: 4px;
         font-size: small;
         font-family: sans-serif;
         width: -moz-max-content;
