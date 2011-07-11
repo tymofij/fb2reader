@@ -26,11 +26,6 @@ const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
 
 const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/g
 
-// those guys serve .zip (not .fb2.zip) books from these hosts:
-// http://bookfi-dl100.s3.amazonaws.com
-// http://bookfi-dl102.s3.amazonaws.com
-const BOOKFI_REGEX = /^http:\/\/bookfi-dl10[02]\.s3\.amazonaws\.com\/.*\.zip$/g
-
 // Content-Disposition: attachment; filename="foo.fb2"
 // see http://greenbytes.de/tech/tc2231/#inlwithasciifilename
 const ATTACHMENT_REGEX = /\.fb2(\.zip)?($|[ \'\"])/g
@@ -96,7 +91,7 @@ FB_Reader.prototype = {
         try {
             isFb2 = false
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
-            if(uri.match(FB2_REGEX) || uri.match(BOOKFI_REGEX)) {
+            if(uri.match(FB2_REGEX)) {
                 dumpln("URI match on "+uri);
                 isFb2 = true;
             }
