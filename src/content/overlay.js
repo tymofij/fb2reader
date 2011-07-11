@@ -1,10 +1,11 @@
 window.addEventListener("load", function() { fb2.init(); }, false)
 
-const FB2_NS   = 'http://www.gribuser.ru/xml/fictionbook/2.0'
-const XLink_NS = 'http://www.w3.org/1999/xlink'
-const HTML_NS = 'http://www.w3.org/1999/xhtml'
-
 var fb2 = {
+
+// ------------------- XML NAMESPACES ------------------------
+    FB2_NS   : 'http://www.gribuser.ru/xml/fictionbook/2.0',
+    XLink_NS : 'http://www.w3.org/1999/xlink',
+    HTML_NS : 'http://www.w3.org/1999/xhtml',
 
 // ------------------- UTILITIES ------------------
 
@@ -14,9 +15,9 @@ var fb2 = {
         if (resultType == null)
             resultType = XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE
 
-        // could use: namespace-uri()='"+FB2_NS+"' and ..
+        // could use: namespace-uri()='"+fb2.FB2_NS+"' and ..
         return doc.evaluate("//fb2:"+query, doc.documentElement,
-                    function(){return FB2_NS},
+                    function(){return fb2.FB2_NS},
                     resultType, null
                     );
     },
@@ -26,7 +27,7 @@ var fb2 = {
     },
 
     getHrefVal : function(elem){ // returns id of element XLink ponts to, like l:href="#note1"
-        return elem.getAttributeNS(XLink_NS, 'href').slice(1)
+        return elem.getAttributeNS(fb2.XLink_NS, 'href').slice(1)
     },
 
     getDocId: function(doc){
@@ -172,7 +173,7 @@ var fb2 = {
                 // we get corresponding binary node
                 var bin = fb2.getSingleElement(doc, "binary[@id='"+fb2.getHrefVal(img)+"']")
                 // create xhtml image and set src to its base64 data
-                var ximg = doc.createElementNS(HTML_NS, 'img')
+                var ximg = doc.createElementNS(fb2.HTML_NS, 'img')
                 ximg.src='data:'+bin.getAttribute('content-type')+';base64,'+bin.textContent
                 img.parentNode.insertBefore(ximg, img)
             } catch(e) {}
@@ -188,19 +189,19 @@ var fb2 = {
         // build index
         var body = fb2.getSingleElement(doc, "body[@name!='notes' or not(@name)]")
         var div = doc.getElementById('contents')
-        var ul = doc.createElementNS(HTML_NS, 'ul');
+        var ul = doc.createElementNS(fb2.HTML_NS, 'ul');
         div.appendChild(ul)
 
         var title_counter = 1;
         var walk_sections = function(start, ul) {
             var sections = doc.evaluate("./fb2:section", start,
-                    function(){return FB2_NS},
+                    function(){return fb2.FB2_NS},
                     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
                     );
             for ( var i=0 ; i < sections.snapshotLength; i++ ) {
                 var section = sections.snapshotItem(i)
                 var title = doc.evaluate("./fb2:title", section,
-                        function(){return FB2_NS},
+                        function(){return fb2.FB2_NS},
                         XPathResult.FIRST_ORDERED_NODE_TYPE, null
                         ).singleNodeValue;
                 if (title) {
@@ -208,25 +209,25 @@ var fb2 = {
 
                     // cleanse ids of copied intitle elements
                     var kids = doc.evaluate("//fb2:*", title_copy,
-                            function(){return FB2_NS},
+                            function(){return fb2.FB2_NS},
                             XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
                             );
                     for(var j=0; j<kids.snapshotLength; j++ )
                         kids.snapshotItem(j).setAttribute("id", "")
 
-                    var a = doc.createElementNS(HTML_NS, 'a')
+                    var a = doc.createElementNS(fb2.HTML_NS, 'a')
                     a.appendChild(title_copy)
 
                     // for usual local href navigation, no hacks
-                    var span = doc.createElementNS(HTML_NS, 'span')
+                    var span = doc.createElementNS(fb2.HTML_NS, 'span')
                     span.id = "zz_" + title_counter++;
                     title.insertBefore(span, title.firstChild)
                     a.href= "#"+span.id;
 
-                    var li = doc.createElementNS(HTML_NS, 'li')
+                    var li = doc.createElementNS(fb2.HTML_NS, 'li')
                     li.appendChild(a)
                     ul.appendChild(li)
-                    var sub_ul = doc.createElementNS(HTML_NS, 'ul')
+                    var sub_ul = doc.createElementNS(fb2.HTML_NS, 'ul')
                     li.appendChild(sub_ul)
                     walk_sections(section, sub_ul)
                 }
@@ -245,8 +246,8 @@ var fb2 = {
         var extlinks = fb2.getElements(doc, "a[@type!='note' or not(@type)]")
         for ( var i=0 ; i < extlinks.snapshotLength; i++ ) {
             var link = extlinks.snapshotItem(i)
-            var href = link.getAttributeNS(XLink_NS, 'href')
-            var xlink= doc.createElementNS(HTML_NS, 'a')
+            var href = link.getAttributeNS(fb2.XLink_NS, 'href')
+            var xlink= doc.createElementNS(fb2.HTML_NS, 'a')
             xlink.href = href
             link.parentNode.insertBefore(xlink, link)
             // move contents
@@ -259,7 +260,7 @@ var fb2 = {
                 var elem = fb2.getSingleElement(doc, "*[@id='"+id+"']")
                 if (elem) {
                     elem.setAttribute("id", "")
-                    var span = doc.createElementNS(HTML_NS, 'span')
+                    var span = doc.createElementNS(fb2.HTML_NS, 'span')
                     span.id = id
                     elem.parentNode.insertBefore(span, elem)
                 }
