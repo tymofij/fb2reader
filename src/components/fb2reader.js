@@ -19,38 +19,19 @@
 const Ci = Components.interfaces;
 const Cc = Components.classes;
 
-function dumpln(s){
-  dump("FB2 "+s+"\n");
-}
-const FB2_NS = "http://www.gribuser.ru/xml/fictionbook/2.0"
-
-const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/g
-
-// Content-Disposition: attachment; filename="foo.fb2"
-// see http://greenbytes.de/tech/tc2231/#inlwithasciifilename
-const ATTACHMENT_REGEX = /\.fb2(\.zip)?($|[ \'\"])/g
-
-const NS_ERROR_NOT_AVAILABLE = Components.results.NS_ERROR_NOT_AVAILABLE;
-
-/* FB2 reader component */
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-
-const FB_READER_CONVERSION = "?from=application/fb2&to=*/*";
-const FB_READER_CONTRACT_ID = "@mozilla.org/streamconv;1" + FB_READER_CONVERSION;
-const FB_READER_COMPONENT_ID = Components.ID("{99889a2c-d14c-11de-a670-d332511dc9a9}");
 
 function FB_Reader(){
     this.wrappedJSObject = this;
 };
-
 FB_Reader.prototype = {
     classDescription: "FictionBook Reader XPCOM Component",
-    classID: FB_READER_COMPONENT_ID,
-    contractID: FB_READER_CONTRACT_ID,
+    classID: Components.ID("{99889a2c-d14c-11de-a670-d332511dc9a9}"),
+    contractID: "@mozilla.org/streamconv;1" + "?from=application/fb2&to=*/*",
 
     _xpcom_categories: [{
         category: "@mozilla.org/streamconv;1",
-        entry: FB_READER_CONVERSION,
+        entry: "?from=application/fb2&to=*/*",
         value: "FB2 to HTML stream converter"
         },
     {
@@ -82,6 +63,12 @@ FB_Reader.prototype = {
     getMIMETypeFromContent: function(request, data) {
         // sets mime type for .fb2 and fb.* files
 
+        const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/g
+
+        // Content-Disposition: attachment; filename="foo.fb2"
+        // see http://greenbytes.de/tech/tc2231/#inlwithasciifilename
+        const ATTACHMENT_REGEX = /\.fb2(\.zip)?($|[ \'\"])/g
+
         var prefs = Cc["@mozilla.org/preferences-service;1"]
                         .getService(Ci.nsIPrefBranch);
 
@@ -92,7 +79,7 @@ FB_Reader.prototype = {
             isFb2 = false
             var uri = request.QueryInterface(Ci.nsIChannel).URI.spec;
             if(uri.match(FB2_REGEX)) {
-                dumpln("URI match on "+uri);
+                dump("FB URI match on "+uri+"\n");
                 isFb2 = true;
             }
             if(request instanceof Ci.nsIHttpChannel) {
@@ -101,7 +88,7 @@ FB_Reader.prototype = {
                 try {
                     var disposition = httpChannel.getResponseHeader("Content-Disposition");
                     if(disposition.match(ATTACHMENT_REGEX) && !type.match(/application\/fb2/g)) {
-                        dumpln("type/disposition match on "+uri);
+                        dump("FB type/disposition match on "+uri+"\n");
                         httpChannel.setResponseHeader("Content-Disposition", "", false);
                         isFb2 = true;
                     }
@@ -111,8 +98,8 @@ FB_Reader.prototype = {
                 return "application/fb2"
             }
         } catch(e) {
-            dumpln("Could not look for a mime type for "+request.name);
-            dumpln(e);
+            dump("FB Could not look for a mime type for "+request.name+"\n");
+            dump("FB "+e+"\n");
             throw e;
         }
     },
@@ -206,7 +193,7 @@ FB_Reader.prototype = {
                     zReader.close()
                     file.remove(false /* non-recursive */)
                 } catch (e) {
-                    dumpln(e)
+                    dump("FB "+e+"\n")
                     throw "error_zip"
                 }
             }
@@ -216,7 +203,7 @@ FB_Reader.prototype = {
                 if (this.data.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
                      this.charset = RegExp.$1;
                 }
-                dumpln("charset detected: "+this.charset)
+                dump("FB charset detected: "+this.charset+"\n")
 
                 // ok, lets make unicode out of binary
                 var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
@@ -248,7 +235,7 @@ FB_Reader.prototype = {
                 if (title_tags.length != 0) {
                     this.title = title_tags[0].textContent;
                     bookHTML.getElementsByTagName('title')[0].textContent = this.title;
-                    dumpln("title found: " + this.title)
+                    dump("FB title found: " + this.title+"\n")
                 }
 
                 // sweet moment of reunion
@@ -256,20 +243,20 @@ FB_Reader.prototype = {
                 bookHTML.getElementsByTagName('body')[0].appendChild(FbInHTML)
 
             } catch (e) {
-                dumpln(e)
+                dump("FB "+e+"\n")
                 throw "error_xml"
             }
 
         // General error handling block
         } catch(e) {
-            dumpln("===========")
-            dumpln(e)
+            dump("FB ===========\n")
+            dump("FB "+e+"\n")
             var XHR = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance(Ci.nsIXMLHttpRequest);
             XHR.open ("GET", "chrome://fb2reader/content/"+e+".xhtml", false); // synchronous load
             XHR.overrideMimeType("text/xml");
             XHR.send(null);
             bookHTML = XHR.responseXML
-            dumpln("-----------")
+            dump("FB -----------\n")
 
         // lets output the XML, be it error or the book
         } finally {
@@ -295,8 +282,7 @@ FB_Reader.prototype = {
     },
 };
 
-
-if (XPCOMUtils.generateNSGetFactory) // Firefox 4
+if (XPCOMUtils.generateNSGetFactory) // Firefox 4+
     var NSGetFactory = XPCOMUtils.generateNSGetFactory([FB_Reader]);
 else // others
     var NSGetModule = XPCOMUtils.generateNSGetModule([FB_Reader]);

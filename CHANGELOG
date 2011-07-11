@@ -1,3 +1,9 @@
+0.22, 2011-07-11
+    * prevent images from being displayed in list of contents
+    * delete temporary files
+    * warn about non-latin filenames in zips
+    * a little less global variables
+
 0.21, 2011-03-06
     * use DOM Storage for saving read position
 

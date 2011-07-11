@@ -4,14 +4,10 @@ const FB2_NS   = 'http://www.gribuser.ru/xml/fictionbook/2.0'
 const XLink_NS = 'http://www.w3.org/1999/xlink'
 const HTML_NS = 'http://www.w3.org/1999/xhtml'
 
-// yes, book.zip is to be tried. If managed to fire 'load' event one can expect anything.
-const FB2_REGEX = /\.(fb2|zip)(#.*)?$/g
-
-const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
-
 var fb2 = {
 
-// Utility functions:
+// ------------------- UTILITIES ------------------
+
     // see https://developer.mozilla.org/en/Xml/id
     // and http://bit.ly/24gZUo for a reason why it is needed
     getElements : function (doc, query, resultType) {
@@ -47,13 +43,12 @@ var fb2 = {
             doc.documentElement,null).getPropertyValue("height").slice(0, -2))
     },
 
-
-//----------------------- INIT  -------------------------------
+//----------------------- INIT -------------------------------
 
 	getPaletteButton: function() {
         // For some weird reason document.getElementById("fb2reader-toggle")
         // works only when the button is visible
-        // this here works for cases when if it is not
+        // this here works for cases when it is not
 		var toolbox = document.getElementById("navigator-toolbox");
 		if (!toolbox || !("palette" in toolbox) || !toolbox.palette)
 			return null;
@@ -101,7 +96,7 @@ var fb2 = {
         fb2.syncToggle();
     },
 
-//------------------------------    WORKHORSES  ---------------------
+//------------------------------ WORKHORSES ---------------------
 
     savePosition: function(event) {
         var doc = event.target
@@ -122,6 +117,8 @@ var fb2 = {
     },
 
     tooltip: function(event) {
+        const SCROLLBAR = 24 // I wonder if there is a reliable way to get it
+
         var a = event.target
         var doc = event.target.ownerDocument
         if (a.nodeName=='a'){
@@ -135,13 +132,13 @@ var fb2 = {
                     note = note.nextSibling
             }
 
-            // alters the note box's position_h to keep it on screen
+            // alters the note's box position_h to keep it on screen
             if ( note.getBoundingClientRect().right > window.innerWidth - SCROLLBAR)
                 note.setAttribute('position_h', 'left')
             if ( note.getBoundingClientRect().left < 0 )
                 note.setAttribute('position_h', '')
 
-            // alters the note box's position_v to keep it on screen
+            // alters the note's box position_v to keep it on screen
             if ( note.getBoundingClientRect().bottom > window.innerHeight - SCROLLBAR)
                 note.setAttribute('position_v', 'up')
             if ( note.getBoundingClientRect().top < 0 )
@@ -150,8 +147,10 @@ var fb2 = {
     },
 
     onPageLoad: function(event) {
+        // yes, book.zip is to be tried. If document managed to fire 'load' event, one can expect anything.
+        const FB2_REGEX = /\.(fb2|zip)(#.*)?$/g
 
-        // that is the document that triggered event
+        // that is the document which triggered event
         var doc = event.originalTarget
 
         // execute for FictionBook only
