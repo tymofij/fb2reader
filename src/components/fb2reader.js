@@ -208,8 +208,8 @@ FB_Reader.prototype = {
                     s2.init(fb2_stream);
                     this.data = s2.read(s2.available());
 
-                    // cleanup, non-recursive
-                    file.remove(0)
+                    zReader.close()
+                    file.remove(false /* non-recursive */)
                 } catch (e) {
                     dumpln(e)
                     throw "error_zip"
