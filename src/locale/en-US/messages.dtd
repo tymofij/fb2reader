@@ -5,6 +5,7 @@
 <ul>
   <li>May be the arhive is broken.</li>
   <li>May be it lacks *.fb2 file inside.</li>
+  <li>Or may be that file has non-Latin characters in its name.</li>
 </ul>
 ">
 
