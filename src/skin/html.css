@@ -18,7 +18,9 @@ div#contents {
     width: -moz-max-content;
     max-width: 25em;
     -moz-border-radius-bottomright: 1em;
+    border-bottom-right-radius: 1em;
     -moz-box-shadow: 2px 2px 3px silver;
+    box-shadow: 2px 2px 3px silver;
     max-height:90%;
     overflow-y: auto;
     }

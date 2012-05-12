@@ -104,6 +104,7 @@ a[type='note'] {
         max-height:20em;
         overflow-y: auto;
         -moz-box-shadow: 2px 2px 3px silver;
+        box-shadow: 2px 2px 3px silver;
         }
         a[type='note'] section p {
             margin: 0.1em 0.3em;
