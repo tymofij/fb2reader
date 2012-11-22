@@ -2,12 +2,12 @@
 
 FictionBook {
     display: block;
-    padding: 2em;
+    padding: 2.5em;
     /*
     http://www.maxdesign.com.au/articles/em/
     http://habrahabr.ru/blogs/personal/96770/
     */
-    max-width: 44em;
+    max-width: 45em;
     margin: 0 auto;
     }
 
