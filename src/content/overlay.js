@@ -99,21 +99,42 @@ var fb2 = {
 
 //------------------------------ WORKHORSES ---------------------
 
+    // Database stuff
+    dbConnection: null,
+    dbInit: function() {
+        Components.utils.import("resource://gre/modules/Services.jsm");
+        Components.utils.import("resource://gre/modules/FileUtils.jsm");
+
+        var file = FileUtils.getFile("ProfD", ["fb2reader.sqlite"]);
+        var alreadyExists = file.exists();
+        fb2.dbConnection = Services.storage.openDatabase(file);
+        if (!alreadyExists)
+            fb2.dbConnection.createTable('books', "id text PRIMARY KEY, position REAL");
+    },
+
     savePosition: function(event) {
         var doc = event.target
         if (!fb2.getDocId(doc))
             return // do not save position for books without ID
         var win = doc.defaultView
         var height = fb2.getDocHeight(doc)
-        globalStorage['fb2reader'][fb2.getDocId(doc)] = win.pageYOffset / height
+        var statement = fb2.dbConnection.createStatement("INSERT OR REPLACE INTO books(id, position) VALUES(:book_id, :position)");
+        statement.params.book_id = fb2.getDocId(doc)
+        statement.params.position = win.pageYOffset / height
+        try {
+            statement.execute()
+        } catch (e if e.code == e.NS_ERROR_FILE_IS_LOCKED) {
+            // ignore failed write attempts
+        }
     },
 
     loadPosition: function(event) {
         var doc = event.target
         var win = doc.defaultView
-        var readPos = globalStorage['fb2reader'][fb2.getDocId(doc)]
-        if (readPos){
-            win.scrollTo(0, parseFloat(readPos) * fb2.getDocHeight(doc))
+        var statement = fb2.dbConnection.createStatement("SELECT position FROM books WHERE id = :book_id");
+        statement.params.book_id = fb2.getDocId(doc)
+        if (statement.executeStep()){
+            win.scrollTo(0, parseFloat(statement.row.position) * fb2.getDocHeight(doc))
         }
     },
 
@@ -268,6 +289,7 @@ var fb2 = {
                 xlink.target = "_blank"
             }
         }
+        fb2.dbInit();
 
         // schedule restoring reading position
         var win = doc.defaultView
