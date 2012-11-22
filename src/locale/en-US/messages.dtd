@@ -20,4 +20,6 @@
 <!ENTITY preferences.enabled "Enable book reading">
 <!ENTITY preferences.paragraphs "Paragraphs">
 
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
 <!ENTITY togglebutton.toggle "Toggle">
