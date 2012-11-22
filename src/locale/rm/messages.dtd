@@ -20,4 +20,6 @@
 <!ENTITY preferences.enabled "Activar il leger dal cudesch">
 <!ENTITY preferences.paragraphs "Paragrafs">
 
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
 <!ENTITY togglebutton.toggle "Midar">

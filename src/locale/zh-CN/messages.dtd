@@ -1,0 +1,25 @@
+<!ENTITY Error.title "打开 FB2 电子书出错">
+
+<!ENTITY ZipFailure.shortDesc "不能解压缩此电子书">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>可能是由于档案已损坏。</li>
+  <li>也可能是其中不包含 *.fb2 文件。</li>
+  <li>也可能是文件名中含有非拉丁字母。</li>
+</ul>
+">
+
+<!ENTITY XMLFailure.shortDesc "无效的 FB2 结构">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>FB2 电子书的 XML 可能是无效的。</li>
+</ul>
+">
+
+<!ENTITY preferences.title "FB2 首选项">
+<!ENTITY preferences.enabled "启用电子书阅读">
+<!ENTITY preferences.paragraphs "段落">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "切换">

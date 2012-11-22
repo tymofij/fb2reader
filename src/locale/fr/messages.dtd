@@ -1,0 +1,25 @@
+<!ENTITY Error.title "Erreur à l'ouverture d'un fichier FB2">
+
+<!ENTITY ZipFailure.shortDesc "Impossible de décompresser le fichier">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>Il est possible que le fichier soit corrompu</li>
+  <li>Il manque peut-être un fichier *.fb2 dans l'archive.</li>
+  <li>Il est possible que certains carctères spéciaux (non-latins) figurent dans le nom du fichier.</li>
+</ul>
+">
+
+<!ENTITY XMLFailure.shortDesc "La structure du FB2 n'est pas valide">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>Le fichier XML du FB2 semble être invalide</li>
+</ul>
+">
+
+<!ENTITY preferences.title "Options du FB2">
+<!ENTITY preferences.enabled "Activer la lecture du livre">
+<!ENTITY preferences.paragraphs "Paragraphes">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "Activer/désactiver">

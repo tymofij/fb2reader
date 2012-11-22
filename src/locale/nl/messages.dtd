@@ -1,0 +1,25 @@
+<!ENTITY Error.title "Fout bij openen FB2-boek">
+
+<!ENTITY ZipFailure.shortDesc "Kan boek niet uitpakken">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>Wellicht is het archiefbestand beschadigd.</li>
+  <li>Wellicht ontbreekt het *.fb2-bestand.</li>
+  <li>Of wellicht bevat de bestandsnaam niet-Latijnse tekens.</li>
+</ul>
+">
+
+<!ENTITY XMLFailure.shortDesc "Geen geldige FB2-structuur">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>De XML-code van het FB2-boek lijkt ongeldig.</li>
+</ul>
+">
+
+<!ENTITY preferences.title "FB2-voorkeuren">
+<!ENTITY preferences.enabled "Boeklezen inschakelen">
+<!ENTITY preferences.paragraphs "Paragrafen">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "Wisselen">

@@ -20,4 +20,6 @@
 <!ENTITY preferences.enabled "Включить чтение книг">
 <!ENTITY preferences.paragraphs "Абзацы">
 
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
 <!ENTITY togglebutton.toggle "Переключить">

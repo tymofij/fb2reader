@@ -1,0 +1,21 @@
+<!ENTITY Error.title "FB2 書籍の展開中にエラーが発生しました">
+
+<!ENTITY ZipFailure.shortDesc "アーカイブを展開できませんでした。">
+<!ENTITY ZipFailure.longDesc "<ul>
+  <li>アーカイブが破損している可能性があります</li>
+  <li>アーカイブに *.fb2 形式のファイルが入っていない可能性があります</li>
+  <li>ファイル名に英数字以外が使われている可能性があります</li>
+</ul>">
+
+<!ENTITY XMLFailure.shortDesc "FB2 の構造が正しくありません。">
+<!ENTITY XMLFailure.longDesc "<ul>
+  <li>この FB2 ファイルの XML は正しくありません。</li>
+</ul>">
+
+<!ENTITY preferences.title "FB2 設定">
+<!ENTITY preferences.enabled "電子書籍の表示を有効にする">
+<!ENTITY preferences.paragraphs "段落">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "オン／オフ">
