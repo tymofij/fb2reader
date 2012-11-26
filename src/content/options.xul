@@ -4,6 +4,7 @@
 <!DOCTYPE window SYSTEM "chrome://fb2reader/locale/messages.dtd">
 
 <prefwindow
+      id="fb2reader_prefs"
       title="&preferences.title;"
       xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <prefpane>
