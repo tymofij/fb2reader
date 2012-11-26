@@ -1,3 +1,9 @@
+0.23, 2012-11-22
+    * added unprefixed box-radius and shadows
+    * ensured space for § menu
+    * switched from GlobalStorage to Sqlite for position saving
+    * added lots of locales from Babelzilla
+
 0.22, 2011-07-11
     * prevent images from being displayed in list of contents
     * delete temporary files
