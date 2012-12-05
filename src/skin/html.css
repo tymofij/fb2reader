@@ -2,7 +2,11 @@
 @namespace fb2 "http://www.gribuser.ru/xml/fictionbook/2.0";
 
 * {margin: 0; padding: 0}
-img {display: block; margin: 0 auto;}
+img {
+    display: block; margin: 0 auto;
+    max-width: 100%; /* to fit into FictionBook */
+}
+
 a:focus { outline: none }
 
 div#contents {
