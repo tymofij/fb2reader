@@ -1,0 +1,25 @@
+<!ENTITY Error.title "Viga FB2-raamatu avamisel">
+
+<!ENTITY ZipFailure.shortDesc "Ei õnnestu raamatut lahti pakkida">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>Arhiiv võib olla vigane.</li>
+  <li>Võib olla, et selles puudub *.fb2 fail.</li>
+  <li>Samuti võib olla, et selle faili nimes on mitte-Ladina kirjamärgid.</li>
+</ul>
+">
+
+<!ENTITY XMLFailure.shortDesc "Ebaõige FB2 struktuur">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>FB2-raamatu XML kood näib olevat vigane.</li>
+</ul>
+">
+
+<!ENTITY preferences.title "FB2 sätted">
+<!ENTITY preferences.enabled "Luba raamatu lugemine">
+<!ENTITY preferences.paragraphs "Lõigud">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "Lülita sisse/välja">
