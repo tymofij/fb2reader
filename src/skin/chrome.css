@@ -1,16 +1,22 @@
 #fb2reader-toggle {
     list-style-image: url(chrome://fb2reader/skin/toolbar.png);
-    -moz-image-region: rect(0, 24px, 24px, 0);  
+    -moz-image-region: rect(0, 24px, 24px, 0);
 }
 
 #fb2reader-toggle[state="0"] {
-    -moz-image-region: rect(0, 48px, 24px, 24px);  
+    -moz-image-region: rect(0, 48px, 24px, 24px);
 }
 
 toolbar[iconsize="small"] #fb2reader-toggle {
-    -moz-image-region: rect(0, 64px, 16px, 48px);  
+    -moz-image-region: rect(0, 64px, 16px, 48px);
 }
 
 toolbar[iconsize="small"] #fb2reader-toggle[state="0"] {
-    -moz-image-region: rect(0, 80px, 16px, 64px);  
+    -moz-image-region: rect(0, 80px, 16px, 64px);
+}
+
+#fb2reader-toggle[cui-areatype="menu-panel"],
+toolbarpaletteitem[place="palette"] > #fb2reader-toggle {
+    list-style-image: url(chrome://fb2reader/skin/palette.png);
+    -moz-image-region: rect(0, 32px, 32px, 0);
 }
