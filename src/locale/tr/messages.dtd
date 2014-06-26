@@ -1,0 +1,23 @@
+<!ENTITY Error.title "FB2 kitabı açılırken hata">
+
+<!ENTITY ZipFailure.shortDesc "Kitap ayıklanamadı">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>Arşiv bozuk olabilir.</li>
+  <li>*.fb2 dosyası eksik olabilir.</li>
+  <li>Ya da bu dosya adı Latin olmayan karakterler içeriyor olabilir.</li>
+</ul>">
+
+<!ENTITY XMLFailure.shortDesc "Geçersiz  FB2 yapısı">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>FB2 kitabının XML'si geçersiz görünüyor.</li>
+</ul>">
+
+<!ENTITY preferences.title "FB2 tercihleri">
+<!ENTITY preferences.enabled "Kitap okumayı etkinleştir">
+<!ENTITY preferences.paragraphs "Paragraflar">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "Aç-kapat">

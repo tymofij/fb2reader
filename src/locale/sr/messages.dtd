@@ -4,19 +4,19 @@
 <!ENTITY ZipFailure.longDesc "
 <ul>
   <li>Можда је архива оштећена.</li>
-  <li>Можда унутар архиве недостаје датотека *.fb2.</li>
-  <li>Можда је назив датотеке написан нелатиничним словима.</li>
+  <li>Или у архиви недостаје *.fb2.</li>
+  <li>Или је име датотеке написано неенглеским симболима.</li>
 </ul>
 ">
 
-<!ENTITY XMLFailure.shortDesc "Неисправна FB2 структура">
+<!ENTITY XMLFailure.shortDesc "Неисправна структура FB2 датотеке.">
 <!ENTITY XMLFailure.longDesc "
 <ul>
-  <li>XML датотека FB2 књиге је неисправна.</li>
+  <li>XML ове FB2 књиге је неисправан.</li>
 </ul>
 ">
 
-<!ENTITY preferences.title "FB2 подешавања">
+<!ENTITY preferences.title "Поставке FB2 формата">
 <!ENTITY preferences.enabled "Омогући читање књига">
 <!ENTITY preferences.paragraphs "Пасуси">
 
