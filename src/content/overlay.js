@@ -295,8 +295,8 @@ var fb2 = {
         var win = doc.defaultView
         win.addEventListener("load", fb2.loadPosition , false)
 
-        // handler to save reading position on each scroll
-        doc.defaultView.addEventListener("scroll", fb2.savePosition, false)
+        // handler to save reading position on close
+        doc.defaultView.addEventListener("beforeunload", fb2.savePosition, false)
 
     } // onPageLoad end
 }
