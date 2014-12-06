@@ -1,0 +1,23 @@
+<!ENTITY Error.title "Error abriendo libro FB2">
+
+<!ENTITY ZipFailure.shortDesc "No se ha podido descomprimir el libro">
+<!ENTITY ZipFailure.longDesc "
+<ul>
+  <li>Puede que el archivo esté roto.</li>
+  <li>Puede que le falte el archivo *.fb2 dentro.</li>
+  <li>O puede que el fichero contenga caracteres no latinos en su nombre.</li>
+</ul>">
+
+<!ENTITY XMLFailure.shortDesc "Estructura FB2 no válida">
+<!ENTITY XMLFailure.longDesc "
+<ul>
+  <li>El XML del libro FB2 parece no ser válido.</li>
+</ul>">
+
+<!ENTITY preferences.title "Preferencias de FB2">
+<!ENTITY preferences.enabled "Activar lectura de libros">
+<!ENTITY preferences.paragraphs "Párrafos">
+
+<!-- Verb. Title of Toolbar's toggle button
+	for switching the addon on and off -->
+<!ENTITY togglebutton.toggle "Conmutar">
