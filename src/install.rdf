@@ -6,20 +6,20 @@
     <em:type>2</em:type>
     <em:id>fb2reader@clear.com.ua</em:id>
     <em:name>FB2 Reader</em:name>
-    <em:version>0.25</em:version>
+    <em:version>0.26</em:version>
     <em:creator>Timothy Babych</em:creator>
     <em:description>Read FB2 e-Books with Firefox</em:description>
     <!-- To serve Firefox 3 with proper 32x32 icon -->
     <em:iconURL>chrome://fb2reader_icon/skin/icon.png</em:iconURL>
     <em:optionsURL>chrome://fb2reader/content/options.xul</em:optionsURL>
-    <em:homepageURL>http://clear.com.ua/en/projects/firefox/fb2reader</em:homepageURL>
+    <em:homepageURL>https://github.com/tymofij/fb2reader</em:homepageURL>
 
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>8.0</em:maxVersion>
+        <em:maxVersion>37.0</em:maxVersion>
       </Description>
     </em:targetApplication>
 
@@ -32,15 +32,7 @@
       </Description>
     </em:targetApplication>
 
-    <!-- Fennec https://bugzilla.mozilla.org/show_bug.cgi?id=621406
-    <em:targetApplication>
-      <Description>
-        <em:id>{a23983c0-fd0e-11dc-95ff-0800200c9a66}</em:id>
-        <em:minVersion>4.0b3</em:minVersion>
-        <em:maxVersion>4.0.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-    -->
+    <!-- Firefox Mobile is not supported. https://bugzilla.mozilla.org/show_bug.cgi?id=621406 -->
 
     <em:localized>
       <Description>
@@ -48,7 +40,6 @@
         <em:name>FB2 читалка</em:name>
         <em:creator>Тимофій Бабич</em:creator>
         <em:description>Читайте електронні книжки FB2 просто з Firefox’а.</em:description>
-        <em:homepageURL>http://clear.com.ua/projects/firefox/fb2reader</em:homepageURL>
       </Description>
     </em:localized>
 
@@ -58,7 +49,6 @@
         <em:name>FB2 читалка</em:name>
         <em:creator>Тимофей Бабич</em:creator>
         <em:description>Читайте електронные книги FB2 прямо из Firefox’а.</em:description>
-        <em:homepageURL>http://clear.com.ua/ru/projects/firefox/fb2reader</em:homepageURL>
       </Description>
     </em:localized>
 
