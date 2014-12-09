@@ -1,5 +1,5 @@
 /**
- * FB2Reader Firefox Extension: http://clear.com.ua/projects/fb2reader
+ * FB2Reader Firefox Extension
  * Copyright (C) 2009 Tymofiy Babych (tim.babych@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
