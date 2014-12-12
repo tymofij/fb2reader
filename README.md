@@ -1,5 +1,4 @@
 FB2 Reader addon for Firefox
-=============================
 
 FB2 Features:
 ---------
@@ -31,13 +30,16 @@ FAQ
 ----
 
 **How to set text font?**
+
 Go to Firefox _Preferences_ and in <a href="http://support.mozilla.com/en-US/kb/Options%20window%20-%20Content%20panel">_Content_</a> tab pick _Default font_.
 
 **How to download .fb2 file?**
+
 Right-click on a file link and pick _Save As…_
 Or temporarily turn addon off with toolbar button.
 
 **How can I change book styles?**
+
 Install [Stylish](https://addons.mozilla.org/firefox/addon/2108) и addon and then add your styles, see [example](http://userstyles.org/styles/24584).
 
 Known Issues
