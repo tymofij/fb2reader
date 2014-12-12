@@ -1,5 +1,7 @@
 FB2 Reader addon for Firefox
 
+---
+
 FB2 Features:
 ---------
 
