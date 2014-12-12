@@ -1,4 +1,4 @@
-FB2 Reader addon for Firefox
+<a href="http://en.wikipedia.org/wiki/FictionBook">FictionBook (.fb2)</a> e-book reader addon for Firefox
 
 ---
 
