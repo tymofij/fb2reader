@@ -42,7 +42,7 @@ Or temporarily turn addon off with toolbar button.
 
 **How can I change book styles?**
 
-Install [Stylish](https://addons.mozilla.org/firefox/addon/2108) и addon and then add your styles, see [example](http://userstyles.org/styles/24584).
+Install [Stylish](https://addons.mozilla.org/firefox/addon/2108) addon and then add your styles, see [example](http://userstyles.org/styles/24584).
 
 Known Issues
 -------------
