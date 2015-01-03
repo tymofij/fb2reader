@@ -26,7 +26,7 @@ Firefox Integration
 * No restart to enable/disable
 * Remember reading position
 
-<a href="https://addons.mozilla.org/firefox/addon/fb2-reader/">Install from Mozilla Addons</a>, also see screenshots and reviews.
+**<a href="https://addons.mozilla.org/firefox/addon/fb2-reader/">Install from Mozilla Addons</a>**, also see screenshots and reviews there.
 
 FAQ
 ----
