@@ -1,5 +1,7 @@
 <a href="http://en.wikipedia.org/wiki/FictionBook">FictionBook (.fb2)</a> e-book reader addon for Firefox
 
+**<a href="https://addons.mozilla.org/firefox/addon/fb2-reader/">Install from Mozilla Addons</a>**, also see screenshots and reviews there.
+
 ---
 
 FB2 Features:
@@ -25,8 +27,6 @@ Firefox Integration
 * Style with Stylish
 * No restart to enable/disable
 * Remember reading position
-
-**<a href="https://addons.mozilla.org/firefox/addon/fb2-reader/">Install from Mozilla Addons</a>**, also see screenshots and reviews there.
 
 FAQ
 ----
