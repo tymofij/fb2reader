@@ -26,6 +26,7 @@ locale  fb2reader  es-ES    locale/es-ES/
 locale  fb2reader  et       locale/et/
 locale  fb2reader  de       locale/de/
 locale  fb2reader  fr       locale/fr/
+locale  fb2reader  gl       locale/gl/
 locale  fb2reader  ja       locale/ja/
 locale  fb2reader  lt       locale/lt/
 locale  fb2reader  nl       locale/nl/

@@ -8,7 +8,7 @@ SEAMONKEY_PROFILE="/home/tim/.mozilla/seamonkey/dev"
 INSTALL_DIRECTORY="/extensions/fb2reader@clear.com.ua"
 
 XPI_FILE="fb2reader.xpi"
-VERSION="0.26"
+VERSION="0.27"
 
 update_fx: versionize_rdf $(DESTINATIONS)
 	mkdir -p $(FIREFOX_PROFILE)$(INSTALL_DIRECTORY)
