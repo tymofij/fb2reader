@@ -27,7 +27,7 @@ update_sm: versionize_rdf $(DESTINATIONS)
 	rm -f $(SEAMONKEY_PROFILE)/extensions.*
 
 run: update_fx
-	~/bin/firefox/firefox -P dev -no-remote
+	firefox -P dev -no-remote
 
 36: update_fx
 	~/bin/firefox-3.6/firefox -P dev -no-remote

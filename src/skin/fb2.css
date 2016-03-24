@@ -12,7 +12,7 @@ FictionBook {
     }
 
 /* hide metadata */
-description title-info > *, document-info, src-title-info, publish-info, custom-info, binary {display: none; }
+description title-info > *, document-info, src-title-info, publish-info, custom-info, binary, stylesheet {display: none; }
 /* but show coverpage and the annotation  */
 coverpage, annotation {display:block !important;}
 
