@@ -1,5 +1,6 @@
-0.27, 2016-03-23
+0.28, 2016-03-23
     * added Galician
+    * hidden <stylesheets> element
 
 0.26, 2014-12-09
     * added Spanish(ES) locale, changed homepage to GitHub
