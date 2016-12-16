@@ -33,7 +33,7 @@ FAQ
 
 **How to set text font?**
 
-Go to Firefox _Preferences_ and in <a href="http://support.mozilla.com/en-US/kb/Options%20window%20-%20Content%20panel">_Content_</a> tab pick _Default font_.
+Go to Firefox _Preferences_ and in <a href="http://support.mozilla.com/en-US/kb/Options%20window%20-%20Content%20panel">_Content_</a> tab pick _Default font_, or set _Custom font_ through an add-on [as this](https://addons.mozilla.org/firefox/addon/theme-font-size-changer/).
 
 **How to download .fb2 file?**
 
