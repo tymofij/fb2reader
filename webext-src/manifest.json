@@ -1,0 +1,37 @@
+{
+  "description": "Read FB2 e-Books with Firefox",
+  "manifest_version": 2,
+  "name": "FB2 Reader",
+  "version": "0.30",
+  "homepage_url": "https://github.com/tymofij/fb2reader",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "24": "icons/icon-24.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "64": "icons/icon-64.png"
+  },
+
+  "permissions": [
+    "webRequest", "webRequestBlocking", "*://*/*.fb2"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "fb2reader@clear.com.ua",
+      "strict_min_version": "57.0a1"
+    }
+  },
+
+  "web_accessible_resources": [
+    "css/fb2.css",
+    "css/html.css",
+    "css/print.css",
+    "overlay.js"
+  ]
+
+}

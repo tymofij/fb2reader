@@ -1,0 +1,113 @@
+@namespace "http://www.gribuser.ru/xml/fictionbook/2.0";
+
+FictionBook {
+    display: block;
+    padding: 2.5em;
+    /*
+    http://www.maxdesign.com.au/articles/em/
+    http://habrahabr.ru/blogs/personal/96770/
+    */
+    max-width: 45em;
+    margin: 0 auto;
+    }
+
+/* hide metadata */
+description title-info > *, document-info, src-title-info, publish-info, custom-info, binary, stylesheet {display: none; }
+/* but show coverpage and the annotation  */
+coverpage, annotation {display:block !important;}
+
+annotation {margin: 0 0 0.4em 40%; font-size:smaller;}
+annotation > *:first-child {margin-top:0}
+
+/* those are blocky */
+section, title, subtitle, p, cite, epigraph, poem, stanza, v, empty-line {display: block; }
+
+/* paragraphs */
+p { text-align: justify; }
+/* browser-style, default */
+p { margin: 1em 0; text-indent: 0; }
+
+empty-line {margin: 1em 0;}
+
+body > title {font-size: x-large; }
+title {font-size: large;}
+    title p {margin: 0.3em 0;}
+title, title p, subtitle {
+    text-align: center; text-indent: 0;
+    }
+
+subtitle {font-weight:bold;}
+
+/* visuals */
+emphasis {font-style: italic;}
+strong {font-weight:bold;}
+strikethrough { text-decoration: line-through; }
+sub {vertical-align: sub;font-size: xx-small;}
+sup {vertical-align: super;font-size: xx-small;}
+code {white-space: pre; font-family: monospace;}
+
+/* citations and epigraphs */
+cite {border-left: 5px solid silver; background: #eee; padding: 0.4em 1em;}
+cite > p:first-child, cite > p:last-child {margin: 0;}
+
+text-author {margin-left: 5em; font-style: italic;}
+epigraph {margin-left: 50%;}
+epigraph text-author {margin-left: 0;}
+
+/* poems */
+poem {margin-left: 10%}
+stanza {margin: 0.5em 0;}
+    v {}
+
+table {display: table; border-collapse: collapse; margin: 0 auto;}
+    tr {display: table-row;}
+    td, th {
+        display: table-cell;
+        padding: 0.2em 0.5em;
+        border: 1px solid silver;
+        }
+    th { font-weight: bold; }
+
+    td[align="left"], th[align="left"] {text-align: left;}
+    td[align="right"], th[align="right"] {text-align: right;}
+    td[align="center"], th[align="center"] {text-align: center;}
+
+    td[valign="top"],  th[valign="top"] {vertical-align: top;}
+    td[valign="middle"], th[valign="middle"] {vertical-align: middle;}
+    td[valign="bottom"], th[valign="bottom"] {vertical-align: bottom;}
+
+/* notes */
+body[name="notes"] {display:none;}
+
+a[type='note'] {
+    background:#f5f5b5;
+    position:relative;
+    cursor: help;
+    }
+    a[type='note']:hover section {display:block; }
+    a[type='note'] section {
+        cursor: default;
+        z-index:2;
+        position: absolute;
+        top:0.5em; left: 0.5em;
+        display:none;
+        background: #f5f5b5;
+        border: 1px solid #baba45;
+        border-radius: 4px;
+        font-size: small;
+        font-family: sans-serif;
+        width: -moz-max-content;
+        max-width: 20em;
+        max-height:20em;
+        overflow-y: auto;
+        -moz-box-shadow: 2px 2px 3px silver;
+        box-shadow: 2px 2px 3px silver;
+        }
+        a[type='note'] section p {
+            margin: 0.1em 0.3em;
+            text-align: left;
+            text-indent: 0;
+            }
+        a[type='note'] section title { display:none; }
+        a[type='note'] section[position_h='left'] { left:auto; right: 0.5em;}
+        a[type='note'] section[position_v='up'] { top:auto; bottom: 0.5em;}
