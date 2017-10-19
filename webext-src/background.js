@@ -69,11 +69,8 @@ browser.webRequest.onBeforeRequest.addListener(
 function headers_listener(details) {
   removeHeader(details.responseHeaders, "Content-Disposition");
   setHeader(details.responseHeaders, "Content-Type", "text/xml; charset=utf-8");
-    return {
-        responseHeaders: details.responseHeaders
-    };
+  return { responseHeaders: details.responseHeaders };
 }
-
 browser.webRequest.onHeadersReceived.addListener(
   headers_listener,
   {urls: ["*://*/*.fb2"], types: ["main_frame"]},
@@ -96,7 +93,7 @@ function removeHeader(headers, name) {
   for (var i = 0; i < headers.length; i++) {
     if (headers[i].name.toLowerCase() == name.toLowerCase()) {
       headers.splice(i, 1);
-        return;
+      return;
     }
   }
 }
