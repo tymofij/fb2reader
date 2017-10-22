@@ -30,17 +30,18 @@ P5P+OAl156oArqa/+d/6C/Us5j/weUpOAAAAAElFTkSuQmCC" type="image/png" />
 browser.webRequest.onHeadersReceived.addListener(
   details => {
     if (details.statusCode != 200) {
+      // do not attach body listeners to redirects
       return {}
     }
     removeHeader(details.responseHeaders, "Content-Disposition");
     setHeader(details.responseHeaders, "Content-Type", "text/xml; charset=utf-8");
 
-    let filter = browser.webRequest.filterResponseData(details.requestId);
-    let decoder = new TextDecoder('utf-8');
+    let decoder = new TextDecoder();
     let encoder = new TextEncoder();
     let parser = new DOMParser();
     let serializer = new XMLSerializer();
 
+    let filter = browser.webRequest.filterResponseData(details.requestId);
     let received_data = new Uint8Array()
 
     filter.ondata = event => {
@@ -57,13 +58,21 @@ browser.webRequest.onHeadersReceived.addListener(
         let fb_zip = new JSZip(received_data);
         for (let filename in fb_zip.files){
             if (filename.endsWith('.fb2')) {
-              received_text = fb_zip.files[filename].asText()
+              received_data = fb_zip.files[filename].asUint8Array()
               break;
             }
         }
-      } else {
-        received_text = decoder.decode(received_data)
       }
+      // Try to detect the XML encoding if declared in the file
+      let header = decoder.decode(received_data.slice(0,100))
+      let charset = 'utf-8'
+      if (header.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
+        charset = RegExp.$1;
+        console.log("FB charset detected: " + charset)
+      }
+
+      decoder = new TextDecoder(charset);
+      received_text = decoder.decode(received_data)
 
       let bookTree = parser.parseFromString(received_text, 'application/xml');
       let bookHTML = parser.parseFromString(txt_html_doc, 'application/xml');
