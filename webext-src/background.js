@@ -1,4 +1,6 @@
-var txt_html_doc = `
+'use strict';
+
+let txt_html_doc = `
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.gribuser.ru/xml/fictionbook/2.0">
 <head>
 <title>Untitled Fb2</title>
@@ -25,76 +27,73 @@ P5P+OAl156oArqa/+d/6C/Us5j/weUpOAAAAAElFTkSuQmCC" type="image/png" />
 </body>
 </html>`
 
-
-function listener(details) {
-  var received_data = new Uint8Array()
-
-  let filter = browser.webRequest.filterResponseData(details.requestId);
-  let decoder = new TextDecoder('utf-8');
-  let encoder = new TextEncoder();
-  var parser = new DOMParser();
-  var serializer = new XMLSerializer();
-
-  filter.ondata = event => {
-    var new_data = new Uint8Array(event.data)
-    received_data = mergeTypedArrays(received_data, new_data)
-  }
-
-  filter.onstop = event => {
-    var received_text;
-    if (received_data[0] == 80 && received_data[1] == 75){  // PK header
-      var fb_zip = new JSZip(received_data);
-      console.log(fb_zip.files)
-      for (var filename in fb_zip.files){
-          if (filename.endsWith('.fb2')) {
-            received_text = fb_zip.files[filename].asText()
-            break;
-          }
-      }
-    } else {
-      received_text = decoder.decode(received_data)
-    }
-
-    var bookTree = parser.parseFromString(received_text, 'application/xml');
-    var bookHTML = parser.parseFromString(txt_html_doc, 'application/xml');
-
-    let title_tags = bookTree.getElementsByTagName("book-title")
-    if (title_tags.length != 0) {
-      let title = title_tags[0].textContent;
-      bookHTML.getElementsByTagName('title')[0].textContent = title;
-      console.log("FB title found: " + title);
-    }
-
-    let FbInHTML = bookHTML.adoptNode(bookTree.documentElement);
-    bookHTML.getElementsByTagName('body')[0].appendChild(FbInHTML);
-    let merged_book_data = serializer.serializeToString(bookHTML);
-
-    filter.write(encoder.encode(merged_book_data));
-    filter.close();
-  }
-  return {};
-}
-browser.webRequest.onBeforeRequest.addListener(
-  listener,
-  {urls: ["*://*/*.fb2*"], types: ["main_frame"]},
-  ["blocking"]
-);
-
-function headers_listener(details) {
-  removeHeader(details.responseHeaders, "Content-Disposition");
-  setHeader(details.responseHeaders, "Content-Type", "text/xml; charset=utf-8");
-  return { responseHeaders: details.responseHeaders };
-}
 browser.webRequest.onHeadersReceived.addListener(
-  headers_listener,
-  {urls: ["*://*/*.fb2*"], types: ["main_frame"]},
+  details => {
+    if (details.statusCode != 200) {
+      return {}
+    }
+    removeHeader(details.responseHeaders, "Content-Disposition");
+    setHeader(details.responseHeaders, "Content-Type", "text/xml; charset=utf-8");
+
+    let filter = browser.webRequest.filterResponseData(details.requestId);
+    let decoder = new TextDecoder('utf-8');
+    let encoder = new TextEncoder();
+    let parser = new DOMParser();
+    let serializer = new XMLSerializer();
+
+    let received_data = new Uint8Array()
+
+    filter.ondata = event => {
+      console.log('ondata')
+      let new_data = new Uint8Array(event.data)
+      received_data = mergeTypedArrays(received_data, new_data)
+    }
+
+    filter.onstop = event => {
+      console.log('onstop')
+      let received_text;
+      if (received_data[0] == 80 && received_data[1] == 75){  // PK header
+        console.log('PK header')
+        let fb_zip = new JSZip(received_data);
+        for (let filename in fb_zip.files){
+            if (filename.endsWith('.fb2')) {
+              received_text = fb_zip.files[filename].asText()
+              break;
+            }
+        }
+      } else {
+        received_text = decoder.decode(received_data)
+      }
+
+      let bookTree = parser.parseFromString(received_text, 'application/xml');
+      let bookHTML = parser.parseFromString(txt_html_doc, 'application/xml');
+
+      let title_tags = bookTree.getElementsByTagName("book-title")
+      if (title_tags.length != 0) {
+        let title = title_tags[0].textContent;
+        bookHTML.getElementsByTagName('title')[0].textContent = title;
+        console.log("FB title found: " + title);
+      }
+
+      let FbInHTML = bookHTML.adoptNode(bookTree.documentElement);
+      bookHTML.getElementsByTagName('body')[0].appendChild(FbInHTML);
+      let merged_book_data = serializer.serializeToString(bookHTML);
+
+      filter.write(encoder.encode(merged_book_data));
+      filter.disconnect();
+    }
+    return {responseHeaders: details.responseHeaders };
+  },
+  {urls: [
+    "*://*/*.fb2*"
+  ], types: ["main_frame"]},
   ["blocking", "responseHeaders"]
 )
 
 // ================================================================
 
 function setHeader(headers, name, value) {
-  for (var header of headers) {
+  for (let header of headers) {
     if (header.name.toLowerCase() == name.toLowerCase()) {
       header.value = value;
       return;
@@ -104,7 +103,7 @@ function setHeader(headers, name, value) {
 }
 
 function removeHeader(headers, name) {
-  for (var i = 0; i < headers.length; i++) {
+  for (let i = 0; i < headers.length; i++) {
     if (headers[i].name.toLowerCase() == name.toLowerCase()) {
       headers.splice(i, 1);
       return;
@@ -113,7 +112,7 @@ function removeHeader(headers, name) {
 }
 
 function mergeTypedArrays(a, b) {
-  var c = new Uint8Array(a.length + b.length);
+  let c = new Uint8Array(a.length + b.length);
   c.set(a);
   c.set(b, a.length);
   return c;
