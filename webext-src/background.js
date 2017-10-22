@@ -41,24 +41,21 @@ function listener(details) {
   }
 
   filter.onstop = event => {
-    if (received_data[0] == 80 && received_data[1] == 75){
-      var fb_zip = new JSZip();
-      var fb_file;
-      fb_zip.loadAsync(received_data)
-      .then(function(zip) {
-        zip.forEach(function(relativePath, zipEntry) {
-          if (zipEntry.name.endsWith('.fb2')) {
-            fb_file = zipEntry
-            console.log(fb_file)
+    var received_text;
+    if (received_data[0] == 80 && received_data[1] == 75){  // PK header
+      var fb_zip = new JSZip(received_data);
+      console.log(fb_zip.files)
+      for (var filename in fb_zip.files){
+          if (filename.endsWith('.fb2')) {
+            received_text = fb_zip.files[filename].asText()
+            break;
           }
-        });
-      });
-
-      filter.write(encoder.encode('ZIP'));
-      filter.close();
+      }
+    } else {
+      received_text = decoder.decode(received_data)
     }
 
-    var bookTree = parser.parseFromString(decoder.decode(received_data), 'application/xml');
+    var bookTree = parser.parseFromString(received_text, 'application/xml');
     var bookHTML = parser.parseFromString(txt_html_doc, 'application/xml');
 
     let title_tags = bookTree.getElementsByTagName("book-title")
