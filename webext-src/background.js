@@ -52,7 +52,6 @@ browser.webRequest.onHeadersReceived.addListener(
 
     filter.onstop = event => {
       console.log('onstop')
-      let received_text;
       if (received_data[0] == 80 && received_data[1] == 75){  // PK header
         console.log('PK header')
         let fb_zip = new JSZip(received_data);
@@ -72,7 +71,7 @@ browser.webRequest.onHeadersReceived.addListener(
       }
 
       decoder = new TextDecoder(charset);
-      received_text = decoder.decode(received_data)
+      let received_text = decoder.decode(received_data)
 
       let bookTree = parser.parseFromString(received_text, 'application/xml');
       let bookHTML = parser.parseFromString(txt_html_doc, 'application/xml');
