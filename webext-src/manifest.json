@@ -13,11 +13,11 @@
   },
 
   "permissions": [
-    "webRequest", "webRequestBlocking", "*://*/*.fb2"
+    "webRequest", "webRequestBlocking", "*://*/*.fb2*"
   ],
 
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["jszip.js", "background.js"]
   },
 
   "applications": {

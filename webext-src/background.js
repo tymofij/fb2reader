@@ -1,4 +1,3 @@
-
 var txt_html_doc = `
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.gribuser.ru/xml/fictionbook/2.0">
 <head>
@@ -26,6 +25,7 @@ P5P+OAl156oArqa/+d/6C/Us5j/weUpOAAAAAElFTkSuQmCC" type="image/png" />
 </body>
 </html>`
 
+
 function listener(details) {
   var received_data = new Uint8Array()
 
@@ -41,14 +41,31 @@ function listener(details) {
   }
 
   filter.onstop = event => {
+    if (received_data[0] == 80 && received_data[1] == 75){
+      var fb_zip = new JSZip();
+      var fb_file;
+      fb_zip.loadAsync(received_data)
+      .then(function(zip) {
+        zip.forEach(function(relativePath, zipEntry) {
+          if (zipEntry.name.endsWith('.fb2')) {
+            fb_file = zipEntry
+            console.log(fb_file)
+          }
+        });
+      });
+
+      filter.write(encoder.encode('ZIP'));
+      filter.close();
+    }
+
     var bookTree = parser.parseFromString(decoder.decode(received_data), 'application/xml');
     var bookHTML = parser.parseFromString(txt_html_doc, 'application/xml');
 
     let title_tags = bookTree.getElementsByTagName("book-title")
     if (title_tags.length != 0) {
-        let title = title_tags[0].textContent;
-        bookHTML.getElementsByTagName('title')[0].textContent = title;
-        console.log("FB title found: " + title);
+      let title = title_tags[0].textContent;
+      bookHTML.getElementsByTagName('title')[0].textContent = title;
+      console.log("FB title found: " + title);
     }
 
     let FbInHTML = bookHTML.adoptNode(bookTree.documentElement);
@@ -62,7 +79,7 @@ function listener(details) {
 }
 browser.webRequest.onBeforeRequest.addListener(
   listener,
-  {urls: ["*://*/*.fb2"], types: ["main_frame"]},
+  {urls: ["*://*/*.fb2*"], types: ["main_frame"]},
   ["blocking"]
 );
 
@@ -73,7 +90,7 @@ function headers_listener(details) {
 }
 browser.webRequest.onHeadersReceived.addListener(
   headers_listener,
-  {urls: ["*://*/*.fb2"], types: ["main_frame"]},
+  {urls: ["*://*/*.fb2*"], types: ["main_frame"]},
   ["blocking", "responseHeaders"]
 )
 
