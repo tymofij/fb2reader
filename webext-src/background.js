@@ -4,17 +4,8 @@ let txt_html_doc = `
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.gribuser.ru/xml/fictionbook/2.0">
 <head>
 <title>Untitled Fb2</title>
-<link rel="shortcut icon" href="data:image/png;base64,
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAIgA
-igCFCaWp1QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9kLEA4pEfpEE9oAAAAZdEVYdENv
-bW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAABgElEQVQ4y52TwWpUQRBFT4X3FzHZiZswgcfw
-MAs/QWJAcBb+QGB2xvcDiUECSj5iFi7cCYEEBQVBCEEwZDNIdJHPsO6Ui9fdM8/JJtaqqe57+97q
-2zYYNsEd6/Li3PK6Ahg9fQwBYWAB2D+IfIXBu/cfelsVgOQE1h20jDAsEjb1LGxJzQqA+wy5s7P9
-hPHuGPmM8e4Yl6OZIxdy4fIlgqIAYHX1Hm+P35RNSZ2CWHbVI3BXH5Q8z/vZW9xuQXLavRaAly/a
-oqjdaxk9GyEJyTk5+8Llxbl9fz5n6mYgcXC4D8DBq30klfX62jqSOP30tYAfrEEmqQBmciJN2KXi
-1xPRx8/femCATLKSveYJSyrAbOXRw5rBsIl6gk1vOoLpDdQTrHsFVzHl8i5MqZ+VbDWbAFFPOiX1
-pBNaLUpdBC3280yaeqOQ9HPg84C4C0sSjl4fcf3ruhDZLc9og2ETmxv3U1iMIDDrH7eIEukfVz+X
-P5P+OAl156oArqa/+d/6C/Us5j/weUpOAAAAAElFTkSuQmCC" type="image/png" />
+<link rel="icon" sizes="16x16" href="${browser.extension.getURL('icons/icon-16.png')}" type="image/png" />
+<link rel="icon" sizes="32x32" href="${browser.extension.getURL('icons/icon-16-2x.png')}" type="image/png" />
 <style>
   @import url(${browser.extension.getURL('css/fb2.css')});
   @import url(${browser.extension.getURL('css/html.css')});

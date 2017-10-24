@@ -34,6 +34,8 @@
   },
 
   "web_accessible_resources": [
+    "icons/icon-16.png",
+    "icons/icon-16-2x.png",
     "css/fb2.css",
     "css/html.css",
     "css/print.css",
