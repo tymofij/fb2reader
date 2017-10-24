@@ -26,11 +26,12 @@ P5P+OAl156oArqa/+d/6C/Us5j/weUpOAAAAAElFTkSuQmCC" type="image/png" />
 <div id="contents"><div>§</div></div>
 </body>
 </html>`
+const FB2_REGEX = /\.fb2(\.zip)?(#.*)?$/i
 
 browser.webRequest.onHeadersReceived.addListener(
   details => {
-    if (details.statusCode != 200) {
-      // do not attach body listeners to redirects
+    if (details.statusCode != 200 || !details.url.match(FB2_REGEX))  {
+      // do not attach body listeners to redirects and non-book urls
       return {}
     }
     removeHeader(details.responseHeaders, "Content-Disposition");
@@ -65,7 +66,7 @@ browser.webRequest.onHeadersReceived.addListener(
       // Try to detect the XML encoding if declared in the file
       let header = decoder.decode(received_data.slice(0,100))
       let charset = 'utf-8'
-      if (header.match (/<?xml\s+version\s*=\s*["']1.0['"]\s+encoding\s*=\s*["'](.*?)["']/)) {
+      if (header.match(/<?xml\s+version\s*=\s*["']1\.0['"]\s+encoding\s*=\s*["'](.*?)["']/i)) {
         charset = RegExp.$1;
         console.log("FB charset detected: " + charset)
       }
@@ -93,7 +94,10 @@ browser.webRequest.onHeadersReceived.addListener(
     return {responseHeaders: details.responseHeaders };
   },
   {urls: [
-    "*://*/*.fb2*"
+    "*://*/*.fb2*",
+    "*://*/*.FB2*",
+    "*://*/*.Fb2*",
+    "*://*/*.fB2*"
   ], types: ["main_frame"]},
   ["blocking", "responseHeaders"]
 )
