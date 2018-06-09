@@ -2,6 +2,10 @@ const FB2_NS = 'http://www.gribuser.ru/xml/fictionbook/2.0'
 const XLink_NS = 'http://www.w3.org/1999/xlink'
 const HTML_NS = 'http://www.w3.org/1999/xhtml'
 
+function nsResolver() {
+    return FB2_NS
+}
+
 // see https://developer.mozilla.org/en/Xml/id
 // and http://bit.ly/24gZUo for a reason why it is needed
 function getElements(doc, query, resultType) {
@@ -9,10 +13,7 @@ function getElements(doc, query, resultType) {
         resultType = XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE
 
     // could use: namespace-uri()='"+FB2_NS+"' and ..
-    return doc.evaluate("//fb2:"+query, doc.documentElement,
-        function(){ return FB2_NS },
-        resultType, null
-    )
+    return doc.evaluate("//fb2:"+query, doc.documentElement, nsResolver, resultType, null)
 }
 
 function getSingleElement(doc, query) {
@@ -54,10 +55,7 @@ var fb2 = {
         }
     },
 
-    onPageLoad: function(event) {
-        // that is the document which triggered event
-        var doc = event.originalTarget
-
+    init: function(doc) {
         // for each fb2 image we will create xHTML one
         var images = getElements(doc, "image")
         for ( var i=0 ; i < images.snapshotLength; i++ ) {
@@ -69,7 +67,9 @@ var fb2 = {
                 var ximg = doc.createElementNS(HTML_NS, 'img')
                 ximg.src='data:' + bin.getAttribute('content-type') + ';base64,' + bin.textContent
                 img.parentNode.insertBefore(ximg, img)
-            } catch(e) {}
+            } catch(e) {
+                console.log(e)
+            }
         }
 
         // add listener to all footnote links
@@ -88,13 +88,13 @@ var fb2 = {
         var title_counter = 1;
         var walk_sections = function(start, ul) {
             var sections = doc.evaluate("./fb2:section", start,
-                    function(){return FB2_NS},
+                    nsResolver,
                     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
                     );
             for ( var i=0 ; i < sections.snapshotLength; i++ ) {
                 var section = sections.snapshotItem(i)
                 var title = doc.evaluate("./fb2:title", section,
-                        function(){ return FB2_NS },
+                        nsResolver,
                         XPathResult.FIRST_ORDERED_NODE_TYPE, null
                         ).singleNodeValue;
                 if (title) {
@@ -102,7 +102,7 @@ var fb2 = {
 
                     // cleanse ids of copied intitle elements
                     var kids = doc.evaluate("//fb2:*", title_copy,
-                            function(){ return FB2_NS },
+                            nsResolver,
                             XPathResult.ORDERED_NODE_SNAPSHOT_TYPE , null
                             );
                     for(var j=0; j<kids.snapshotLength; j++ )
@@ -163,5 +163,3 @@ var fb2 = {
         }
     } // onPageLoad end
 }
-
-document.addEventListener("DOMContentLoaded", fb2.onPageLoad)

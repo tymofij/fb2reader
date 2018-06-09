@@ -11,7 +11,11 @@ let txt_html_doc = `
   @import url(${browser.extension.getURL('css/html.css')});
   @import url(${browser.extension.getURL('css/print.css')}) print;
 </style>
-<script src="${browser.extension.getURL('overlay.js')}"></script>
+<script src="${browser.extension.getURL('tools.js')}"></script>
+<script>
+  function onPageLoad(event){fb2.init(event.originalTarget)};
+  document.addEventListener("DOMContentLoaded", onPageLoad);
+</script>
 </head>
 <body>
 <div id="contents"><div>§</div></div>
