@@ -97,10 +97,10 @@ a[type='note'] {
         font-size: small;
         font-family: sans-serif;
         width: -moz-max-content;
+        width: -webkit-max-content;
         max-width: 20em;
         max-height:20em;
         overflow-y: auto;
-        -moz-box-shadow: 2px 2px 3px silver;
         box-shadow: 2px 2px 3px silver;
         }
         a[type='note'] section p {
