@@ -12,7 +12,7 @@ FB2 Features:
 * Footnotes
 * Index
 * Tables
-* Zipped books
+* Zipped books (only online, local books have to be unzipped)
 
 Firefox Integration
 ---------------
@@ -24,9 +24,8 @@ Firefox Integration
 * Adjust font size and face
 * Scroll smoothly
 * Print and Print preview
-* Style with Stylish
+* Style with Stylus
 * No restart to enable/disable
-* Remember reading position
 
 FAQ
 ----
@@ -38,11 +37,11 @@ Go to Firefox _Preferences_ and in <a href="http://support.mozilla.com/en-US/kb/
 **How to download .fb2 file?**
 
 Right-click on a file link and pick _Save As…_
-Or temporarily turn addon off with toolbar button.
+Or temporarily turn addon off.
 
 **How can I change book styles?**
 
-Install [Stylish](https://addons.mozilla.org/firefox/addon/2108) addon and then add your styles, see [example](http://userstyles.org/styles/24584).
+Install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see [example](http://userstyles.org/styles/24584).
 
 Known Issues
 -------------
