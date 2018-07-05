@@ -14,34 +14,20 @@
     "128": "icons/icon-128.png"
   },
 
-  "permissions": [
-    "webRequest", "webRequestBlocking",
-    "*://*/*.fb2*",
-    "*://*/*.FB2*",
-    "*://*/*.Fb2*",
-    "*://*/*.fB2*"
-  ],
-
-  "background": {
-    "scripts": ["jszip.js", "streamfilter.js"]
-  },
-
-  "applications": {
-    "gecko": {
-      "id": "fb2reader@clear.com.ua",
-      "strict_min_version": "57.0a1"
-    }
-  },
-
   "content_scripts": [
     {
       "matches": [
+        "*://*/*.fb2",
+        "*://*/*.FB2",
+        "*://*/*.Fb2",
+        "*://*/*.fB2",
+
         "file:///*.fb2",
         "file:///*.FB2",
         "file:///*.Fb2",
         "file:///*.fB2"
       ],
-
+      "css": ["css/fb2.css", "css/html.css"],
       "js": ["tools.js", "local.js"]
     }
   ],
