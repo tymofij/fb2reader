@@ -6,7 +6,7 @@
     <em:type>2</em:type>
     <em:id>fb2reader@clear.com.ua</em:id>
     <em:name>FB2 Reader</em:name>
-    <em:version>0.28</em:version>
+    <em:version>0.28.1</em:version>
     <em:creator>Timothy Babych</em:creator>
     <em:description>Read FB2 e-Books with Firefox</em:description>
     <!-- To serve Firefox 3 with proper 32x32 icon -->
@@ -23,12 +23,21 @@
       </Description>
     </em:targetApplication>
 
+    <!-- Pale Moon -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
+        <em:minVersion>25.0</em:minVersion>
+        <em:maxVersion>25.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
     <!-- SeaMonkey -->
     <em:targetApplication>
       <Description>
         <em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
         <em:minVersion>2.0</em:minVersion>
-        <em:maxVersion>2.5a1</em:maxVersion>
+        <em:maxVersion>2.9</em:maxVersion>
       </Description>
     </em:targetApplication>
 
