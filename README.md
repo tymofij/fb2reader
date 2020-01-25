@@ -41,11 +41,11 @@ Go to Firefox _Preferences_ and in <a href="https://support.mozilla.org/en-US/kb
 ### How do I download an .fb2 file?
 
 Right-click on a file link and pick _Save As…_
-Or temporarily turn addon off.
+Or temporarily turn the addon off.
 
 ### How can I completely change the book style?
 
-Please install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see [example](http://userstyles.org/styles/24584).
+Please install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see the [example](http://userstyles.org/styles/24584).
 
 Known Issues
 -------------
