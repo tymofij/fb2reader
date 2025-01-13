@@ -32,7 +32,7 @@ FAQ
 
 ### Reading local .fb2 files in Linux
 
-Please add line `text/xml fb2` to `~/.mime.types` file. See [#8](https://github.com/tymofij/fb2reader/issues/8) for details.
+Requires setting FB2 mimetype to text/xml. See [issue#8](https://github.com/tymofij/fb2reader/issues/8) for details.
 
 ### How do I set text font?
 
