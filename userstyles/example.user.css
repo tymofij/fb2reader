@@ -1,3 +1,10 @@
+/* ==UserStyle==
+@name         Example Fb2 user style
+@namespace    github.com/tymofij/fb2reader
+@author       Tim Babych
+@version      1.0.0
+*/
+
 @namespace url(http://www.gribuser.ru/xml/fictionbook/2.0);
 @namespace html url(http://www.w3.org/1999/xhtml);
 /* IMG's and A's live in html namespace, so refer to them as html|img and html|a */
