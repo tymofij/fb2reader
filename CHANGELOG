@@ -4,6 +4,11 @@
 0.30, 2017-10-29
     * WebExtension
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+0.28.1, 2018-10-22
+    * Added Pale Moon support
+
 0.28, 2016-03-23
     * added Galician
     * hidden <stylesheets> element

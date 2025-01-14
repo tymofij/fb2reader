@@ -4,28 +4,17 @@
 
 ---
 
-FB2 Features:
-------------
-
-* Links
-* Images
-* Footnotes
-* Index
-* Tables
-* Zipped books (only online, local books have to be unzipped)
+Reader supports links, images, footnotes, TOC, tables, zipped books (only online, local books have to be unzipped)
 
 Firefox Integration
 -------------------
 
-* Bookmark FB2 books
-    * Organize your bookmarks with folders and tags
-    * Sync the list with Firefox Sync
-* Search text with Ctrl+F
-* Adjust font size and face
-* Scroll smoothly
+* Bookmarks
+* Searching with Ctrl+F
+* Font size and face
+* Smooth scroll
 * Print and Print preview
-* Style with Stylus
-* No restart to enable/disable
+* Styling with Stylus
 
 FAQ
 ---
@@ -41,7 +30,6 @@ Go to Firefox _Preferences_ and in <a href="https://support.mozilla.org/en-US/kb
 ### How do I download an .fb2 file?
 
 Right-click on a file link and pick _Save As…_
-Or temporarily turn the addon off.
 
 ### How can I completely change the book style?
 
@@ -52,3 +40,7 @@ Known Issues
 
 * _View Source_ does not work.
 * _File - Save Page_  barely works.
+
+Legacy XPI
+----------
+See branch [`legacy-xpi`](https://github.com/tymofij/fb2reader/tree/legacy-xpi)
