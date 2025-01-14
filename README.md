@@ -1,18 +1,17 @@
-<a href="http://en.wikipedia.org/wiki/FictionBook">FictionBook (.fb2)</a> e-book reader addon for Firefox
+FictionBook (.fb2) e-book reader addon for Firefox
 
 **<a href="https://addons.mozilla.org/firefox/addon/fb2-reader/">Install from Mozilla Addons</a>**, also see screenshots and reviews there.
 
 ---
 
-Reader supports links, images, footnotes, TOC, tables, zipped books (only online, local books have to be unzipped)
+The reader supports links, images, footnotes, TOC, tables, zipped books (only online, local books have to be unzipped)
 
 Firefox Integration
 -------------------
 
 * Bookmarks
 * Searching with Ctrl+F
-* Font size and face
-* Smooth scroll
+* Font size and typeface
 * Print and Print preview
 * Styling with Stylus
 
@@ -33,7 +32,7 @@ Right-click on a file link and pick _Save As…_
 
 ### How can I completely change the book style?
 
-Please install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see the [example](http://userstyles.org/styles/24584).
+Install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see the [example](https://github.com/tymofij/fb2reader/raw/refs/heads/main/userstyles/example.user.css).
 
 Known Issues
 -------------
