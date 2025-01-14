@@ -32,7 +32,7 @@ Right-click on a file link and pick _Save As…_
 
 ### How can I completely change the book style?
 
-Install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see the [example](https://github.com/tymofij/fb2reader/raw/refs/heads/main/userstyles/example.user.css).
+Install [Stylus](https://addons.mozilla.org/firefox/addon/styl-us/) addon and then add your styles, see the [Example](https://github.com/tymofij/fb2reader/raw/refs/heads/main/userstyles/example.user.css).
 
 Known Issues
 -------------
