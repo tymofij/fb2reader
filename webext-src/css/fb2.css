@@ -1,4 +1,4 @@
-@namespace "http://www.gribuser.ru/xml/fictionbook/2.0";
+@namespace url("http://www.gribuser.ru/xml/fictionbook/2.0");
 
 FictionBook {
     display: block;

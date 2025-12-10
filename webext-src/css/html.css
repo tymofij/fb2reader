@@ -1,5 +1,5 @@
-@namespace "http://www.w3.org/1999/xhtml";
-@namespace fb2 "http://www.gribuser.ru/xml/fictionbook/2.0";
+@namespace url("http://www.w3.org/1999/xhtml");
+@namespace fb2 url("http://www.gribuser.ru/xml/fictionbook/2.0");
 
 * {margin: 0; padding: 0}
 img {
