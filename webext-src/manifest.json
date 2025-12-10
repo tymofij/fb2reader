@@ -2,7 +2,7 @@
   "description": "Read FB2 e-Books with Firefox",
   "manifest_version": 2,
   "name": "FB2 Reader",
-  "version": "0.31",
+  "version": "1.0",
   "homepage_url": "https://github.com/tymofij/fb2reader",
   "icons": {
     "16": "icons/icon-16.png",

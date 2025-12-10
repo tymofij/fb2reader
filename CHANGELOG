@@ -1,3 +1,6 @@
+1.0, 2025-12-10
+    * Bugfix for compatibility with Firefox 146
+
 0.31, 2018-06-09
     * Local unzipped fb2 file support
 
