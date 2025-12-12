@@ -1,8 +1,8 @@
 {
   "description": "Read FB2 e-Books with Firefox",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "FB2 Reader",
-  "version": "1.0",
+  "version": "1.1",
   "homepage_url": "https://github.com/tymofij/fb2reader",
   "icons": {
     "16": "icons/icon-16.png",
@@ -15,7 +15,11 @@
   },
 
   "permissions": [
-    "webRequest", "webRequestBlocking",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+
+  "host_permissions": [
     "*://*/*.fb2*",
     "*://*/*.FB2*",
     "*://*/*.Fb2*",
@@ -26,10 +30,13 @@
     "scripts": ["jszip.js", "streamfilter.js"]
   },
 
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "fb2reader@clear.com.ua",
-      "strict_min_version": "57.0a1"
+      "data_collection_permissions": {
+        "required": ["none"]
+      },
+      "strict_min_version": "58.0"
     }
   },
 
@@ -46,13 +53,15 @@
     }
   ],
 
-  "web_accessible_resources": [
-    "icons/icon-16.png",
-    "icons/icon-16-2x.png",
-    "css/fb2.css",
-    "css/html.css",
-    "css/print.css",
-    "tools.js"
-  ]
-
+  "web_accessible_resources": [{
+    "resources": [
+      "icons/icon-16.png",
+      "icons/icon-16-2x.png",
+      "css/fb2.css",
+      "css/html.css",
+      "css/print.css",
+      "tools.js"
+    ],
+    "matches": [ "*://*/*" ]
+  }]
 }
