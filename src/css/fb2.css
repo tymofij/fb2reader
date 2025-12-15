@@ -97,6 +97,7 @@ a[type='note'] {
         font-size: small;
         font-family: sans-serif;
         width: -moz-max-content;
+        width: max-content;
         max-width: 20em;
         max-height:20em;
         overflow-y: auto;
