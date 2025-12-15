@@ -2,13 +2,11 @@ let txt_html_doc = `
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.gribuser.ru/xml/fictionbook/2.0">
 <head>
 <title>Untitled Fb2</title>
-<link rel="icon" sizes="16x16" href="${browser.extension.getURL('icons/icon-16.png')}" type="image/png" />
-<link rel="icon" sizes="32x32" href="${browser.extension.getURL('icons/icon-16-2x.png')}" type="image/png" />
-<style>
-  @import url(${browser.extension.getURL('css/fb2.css')});
-  @import url(${browser.extension.getURL('css/html.css')});
-  @import url(${browser.extension.getURL('css/print.css')}) print;
-</style>
+<link rel="icon" sizes="16x16" href="${browser.runtime.getURL('icons/icon-16.png')}" type="image/png" />
+<link rel="icon" sizes="32x32" href="${browser.runtime.getURL('icons/icon-16-2x.png')}" type="image/png" />
+<link rel="stylesheet" href="${browser.runtime.getURL('css/fb2.css')}" />
+<link rel="stylesheet" href="${browser.runtime.getURL('css/html.css')}" />
+<link rel="stylesheet" href="${browser.runtime.getURL('css/print.css')}" media="print" />
 </head>
 <body>
 <div id="contents"><div>§</div></div>

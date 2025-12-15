@@ -4,14 +4,14 @@ let txt_html_doc = `
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.gribuser.ru/xml/fictionbook/2.0">
 <head>
 <title>Untitled Fb2</title>
-<link rel="icon" sizes="16x16" href="${browser.extension.getURL('icons/icon-16.png')}" type="image/png" />
-<link rel="icon" sizes="32x32" href="${browser.extension.getURL('icons/icon-16-2x.png')}" type="image/png" />
+<link rel="icon" sizes="16x16" href="${browser.runtime.getURL('icons/icon-16.png')}" type="image/png" />
+<link rel="icon" sizes="32x32" href="${browser.runtime.getURL('icons/icon-16-2x.png')}" type="image/png" />
 <style>
-  @import url(${browser.extension.getURL('css/fb2.css')});
-  @import url(${browser.extension.getURL('css/html.css')});
-  @import url(${browser.extension.getURL('css/print.css')}) print;
+  @import url(${browser.runtime.getURL('css/fb2.css')});
+  @import url(${browser.runtime.getURL('css/html.css')});
+  @import url(${browser.runtime.getURL('css/print.css')}) print;
 </style>
-<script src="${browser.extension.getURL('tools.js')}"></script>
+<script src="${browser.runtime.getURL('tools.js')}"></script>
 <script>
   function onPageLoad(event){fb2.init(event.originalTarget)};
   document.addEventListener("DOMContentLoaded", onPageLoad);
