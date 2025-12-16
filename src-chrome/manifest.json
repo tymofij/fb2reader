@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "short_name": "__MSG_extName__",
-  "description": "Read FB2 e-Books with Chrome",
+  "description": "__MSG_extDescr__",
   "default_locale": "en",
   "version": "1.0.1",
   "icons": {
